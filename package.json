@@ -6,6 +6,11 @@
   "repository": "https://github.com/timing71/common",
   "author": "James Muscat",
   "license": "AGPL-3.0-or-later",
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "babel src --out-dir dist"
   },
