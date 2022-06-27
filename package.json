@@ -1,0 +1,17 @@
+{
+  "name": "@timing71/common",
+  "version": "0.0.1",
+  "description": "Timing71 common library",
+  "main": "dist/index.js",
+  "repository": "https://github.com/timing71/common",
+  "author": "James Muscat",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "build": "babel src --out-dir dist"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.5",
+    "@babel/preset-env": "^7.18.2"
+  }
+}
