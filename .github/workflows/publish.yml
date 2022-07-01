@@ -14,7 +14,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@timing71'
       - run: yarn install
-      - run: yarn build
       - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
