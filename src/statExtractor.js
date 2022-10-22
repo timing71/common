@@ -1,4 +1,4 @@
-import { Stat } from './racing';
+import { Stat } from './racing.js';
 
 export class StatExtractor {
   constructor(columnSpec=[]) {

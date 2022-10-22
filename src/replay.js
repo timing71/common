@@ -1,5 +1,5 @@
 import { BlobReader, TextWriter, ZipReader } from "@zip.js/zip.js";
-import { diff, patch } from "./diffs";
+import { diff, patch } from "./diffs.js";
 
 export const REPLAY_FRAME_REGEX = /^([0-9]{5,11})(i?).json$/;
 
