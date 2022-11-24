@@ -3,8 +3,8 @@
   "version": "0.0.3",
   "description": "Timing71 common library",
   "type": "module",
-  "engines" : {
-    "node" : ">=16.0.0"
+  "engines": {
+    "node": ">=16.0.0"
   },
   "exports": {
     ".": "./src/index.js",
@@ -29,6 +29,7 @@
     "jest": "^28.1.2"
   },
   "dependencies": {
-    "@zip.js/zip.js": "^2.4.26"
+    "@zip.js/zip.js": "^2.4.26",
+    "dayjs": "^1.11.6"
   }
 }
