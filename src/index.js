@@ -1,3 +1,4 @@
+export { EventEmitter } from './eventEmitter.js';
 export * from './formats.js';
 export * from './racing.js';
 export * from './replay.js';
