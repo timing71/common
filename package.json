@@ -3,6 +3,9 @@
   "version": "0.0.3",
   "description": "Timing71 common library",
   "type": "module",
+  "engines" : {
+    "node" : ">=16.0.0"
+  },
   "exports": {
     ".": "./src/index.js",
     "./messages": "./src/messages/index.js"
