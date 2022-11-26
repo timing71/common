@@ -1,9 +1,10 @@
-name: Publish Package to npmjs
+name: Publish package
 on:
   release:
     types: [created]
 jobs:
-  build:
+  publishNPM:
+    name: Publish to NPM registry
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,3 +18,18 @@ jobs:
       - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  publishGitHub:
+    name: Publish to GitHub registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@timing71'
+      - run: yarn install
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
