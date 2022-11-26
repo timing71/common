@@ -19,8 +19,7 @@
   "homepage": "https://www.timing71.org/",
   "private": false,
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "access": "public"
   },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest src/"
