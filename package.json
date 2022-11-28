@@ -8,7 +8,8 @@
   },
   "exports": {
     ".": "./src/index.js",
-    "./messages": "./src/messages/index.js"
+    "./messages": "./src/messages/index.js",
+    "./polyfill": "./src/polyfill-transformstream.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,8 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules jest src/"
   },
   "devDependencies": {
-    "jest": "^28.1.2"
+    "jest": "^28.1.2",
+    "web-streams-polyfill": "^3.2.1"
   },
   "dependencies": {
     "@zip.js/zip.js": "^2.4.26",
