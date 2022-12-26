@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@zip.js/zip.js": "^2.4.26",
-    "dayjs": "^1.11.6"
+    "dayjs": "^1.11.6",
+    "deep-equal": "^2.1.0"
   }
 }
