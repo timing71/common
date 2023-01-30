@@ -8,6 +8,7 @@
   },
   "exports": {
     ".": "./src/index.js",
+    "./analysis": "./src/analysis/index.js",
     "./messages": "./src/messages/index.js",
     "./polyfill": "./src/polyfill-transformstream.js"
   },
@@ -33,6 +34,8 @@
   "dependencies": {
     "@zip.js/zip.js": "^2.4.26",
     "dayjs": "^1.11.6",
-    "deep-equal": "^2.1.0"
+    "deep-equal": "^2.1.0",
+    "mobx": "^6.7.0",
+    "mobx-state-tree": "^5.1.7"
   }
 }
