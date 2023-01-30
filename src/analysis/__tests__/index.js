@@ -1,5 +1,5 @@
-import { createAnalyser } from "..";
-import { CURRENT_VERSION } from "../migrate";
+import { createAnalyser } from '..';
+import { CURRENT_VERSION } from '../migrate';
 
 import LM24 from './2021_lm24.json';
 

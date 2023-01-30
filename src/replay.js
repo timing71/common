@@ -1,5 +1,5 @@
-import { BlobReader, TextWriter, ZipReader } from "@zip.js/zip.js";
-import { diff, patch } from "./diffs.js";
+import { BlobReader, TextWriter, ZipReader } from '@zip.js/zip.js';
+import { diff, patch } from './diffs.js';
 
 export const REPLAY_FRAME_REGEX = /^([0-9]{5,11})(i?).json$/;
 
@@ -87,7 +87,6 @@ class Replay {
   async getStateAtRelative(relTime) {
     return await this.getStateAt(this.manifest.startTime + relTime);
   }
-
 }
 
 const applyIframe = (base, iframe) => {
@@ -105,7 +104,6 @@ const applyIframe = (base, iframe) => {
 };
 
 export const createIframe = (base, newState) => {
-
   const prevLatestMessage = base.messages[0];
   const messages = prevLatestMessage ? [] : newState.messages;
 
@@ -121,7 +119,6 @@ export const createIframe = (base, newState) => {
       }
       messages.push(newMessage);
     }
-
   }
 
   return {
@@ -129,11 +126,10 @@ export const createIframe = (base, newState) => {
     session: diff(base.session || {}, newState.session || {}),
     highlight: newState.highlight || [],
     messages
-  }
-
+  };
 };
 
-export const loadReplayFromFile = async (file) => {
+export const loadReplayFromFile = async(file) => {
   const reader = new ZipReader(new BlobReader(file));
   const replay = new Replay(reader);
   await replay._init();

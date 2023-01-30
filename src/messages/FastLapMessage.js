@@ -1,6 +1,6 @@
 import { Stat } from '../racing.js';
 import { timeInSeconds } from '../formats.js';
-import { Message } from "./Message.js";
+import { Message } from './Message.js';
 
 export const FastLapMessage = (se, oldCar, newCar) => {
   const oldLastLap = se.get(oldCar, Stat.LAST_LAP);
@@ -11,12 +11,12 @@ export const FastLapMessage = (se, oldCar, newCar) => {
   if (oldLastLap !== newLastLap) {
     const driver = se.get(newCar, Stat.DRIVER);
     const driverText = driver ? ` (${driver})` : '';
-    //const newBestLap = se.get(newCar, Stat.BEST_LAP);
+    // const newBestLap = se.get(newCar, Stat.BEST_LAP);
     if (
       newLastLap && oldLastLap &&
       newLastLap[1] === 'pb' &&
       (oldLastLap[1] !== 'pb' || oldLastLap[0] !== newLastLap[0]) &&
-      !((oldLastLap[1] === 'sb' || oldLastLap[1] === 'sb-new' ) && newLastLap[1] === 'pb' && oldLastLap[0] === newLastLap[0])
+      !((oldLastLap[1] === 'sb' || oldLastLap[1] === 'sb-new') && newLastLap[1] === 'pb' && oldLastLap[0] === newLastLap[0])
     ) {
       return new Message(
         clazz,

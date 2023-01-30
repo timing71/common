@@ -15,12 +15,11 @@ export const Messages = types.model({
 }).actions(
   self => ({
     update(oldState, newState) {
-
       const prevLatestMessage = oldState.messages[0];
 
       const relevantNewMessages = [];
 
-      for (let i=0; i < newState.messages.length; i++) {
+      for (let i = 0; i < newState.messages.length; i++) {
         const msg = newState.messages[i];
 
         if (prevLatestMessage && msg[0] === prevLatestMessage[0] && msg[2] === prevLatestMessage[2]) {

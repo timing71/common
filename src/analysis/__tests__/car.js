@@ -26,14 +26,13 @@ describe(
   'Car',
   () => {
     it('keeps a list of drivers', () => {
-
       const car = Car.create({ raceNum: RACE_NUM });
       expect(car.drivers.length).toEqual(0);
 
       car.update(
         null, null,
         statExtractor,
-        [ RACE_NUM, 'clazz', 'John Hindhaugh', 1 ]
+        [RACE_NUM, 'clazz', 'John Hindhaugh', 1]
       );
 
       expect(car.drivers.length).toEqual(1);
@@ -42,7 +41,7 @@ describe(
       car.update(
         null, null,
         statExtractor,
-        [ RACE_NUM, 'clazz', 'Eve Hewitt', 1 ]
+        [RACE_NUM, 'clazz', 'Eve Hewitt', 1]
       );
 
       expect(car.drivers.length).toEqual(2);
@@ -51,11 +50,10 @@ describe(
       car.update(
         null, null,
         statExtractor,
-        [ RACE_NUM, 'clazz', 'John Hindhaugh', 1 ]
+        [RACE_NUM, 'clazz', 'John Hindhaugh', 1]
       );
       // We don't add a duplicate entry
       expect(car.drivers.length).toEqual(2);
-
     });
 
     it('takes the first seen value for team name, class and car make', () => {
@@ -65,7 +63,7 @@ describe(
       car.update(
         null, null,
         sdStatExtractor,
-        [ RACE_NUM, 'LMP71', 'Jonny Palmer', 2, 'Team RSL', 'VW Beetle' ]
+        [RACE_NUM, 'LMP71', 'Jonny Palmer', 2, 'Team RSL', 'VW Beetle']
       );
 
       expect(car.teamName).toEqual('Team RSL');
@@ -75,7 +73,7 @@ describe(
       car.update(
         null, null,
         sdStatExtractor,
-        [ RACE_NUM, 'LMP71B', 'Jonny Palmer', 2, 'XXXTeam RSL', 'XXXVW Beetle' ]
+        [RACE_NUM, 'LMP71B', 'Jonny Palmer', 2, 'XXXTeam RSL', 'XXXVW Beetle']
       );
 
       expect(car.teamName).toEqual('Team RSL');
@@ -95,8 +93,8 @@ describe(
       expect(car.currentStint).toBeNull();
 
       car.update(
-        se, [ RACE_NUM, 'John Hindhaugh', ['', ''] ],
-        se, [ RACE_NUM, 'John Hindhaugh', [123.456, ''] ],
+        se, [RACE_NUM, 'John Hindhaugh', ['', '']],
+        se, [RACE_NUM, 'John Hindhaugh', [123.456, '']],
         FlagState.GREEN,
         ARBITRARY_TIMESTAMP
       );
@@ -108,15 +106,15 @@ describe(
       expect(lap.flag).toEqual(FlagState.GREEN);
 
       car.update(
-        se, [ RACE_NUM, 'John Hindhaugh', [123.456, ''] ],
-        se, [ RACE_NUM, 'John Hindhaugh', [123.456, ''] ],
+        se, [RACE_NUM, 'John Hindhaugh', [123.456, '']],
+        se, [RACE_NUM, 'John Hindhaugh', [123.456, '']],
         FlagState.GREEN,
         ARBITRARY_TIMESTAMP
       );
 
       car.update(
-        se, [ RACE_NUM, 'John Hindhaugh', [123.456, ''] ],
-        se, [ RACE_NUM, 'John Hindhaugh', [124.789, ''] ],
+        se, [RACE_NUM, 'John Hindhaugh', [123.456, '']],
+        se, [RACE_NUM, 'John Hindhaugh', [124.789, '']],
         FlagState.GREEN,
         ARBITRARY_TIMESTAMP
       );
@@ -125,7 +123,6 @@ describe(
     });
 
     it('ends a stint when car enters the pits', () => {
-
       const colSpec = [
         Stat.NUM,
         Stat.STATE,
@@ -136,8 +133,8 @@ describe(
       const car = Car.create({ raceNum: RACE_NUM });
 
       car.update(
-        se, [ RACE_NUM, 'RUN', 'Shea Adam', ['', ''] ],
-        se, [ RACE_NUM, 'RUN', 'Shea Adam', [123.456, ''] ],
+        se, [RACE_NUM, 'RUN', 'Shea Adam', ['', '']],
+        se, [RACE_NUM, 'RUN', 'Shea Adam', [123.456, '']],
         FlagState.GREEN,
         ARBITRARY_TIMESTAMP
       );
@@ -145,15 +142,15 @@ describe(
       expect(car.currentStint).not.toBeNull();
 
       car.update(
-        se, [ RACE_NUM, 'RUN', 'Shea Adam', [123.456, ''] ],
-        se, [ RACE_NUM, 'RUN', 'Shea Adam', [122.321, ''] ],
+        se, [RACE_NUM, 'RUN', 'Shea Adam', [123.456, '']],
+        se, [RACE_NUM, 'RUN', 'Shea Adam', [122.321, '']],
         FlagState.GREEN,
         ARBITRARY_TIMESTAMP + 1
       );
 
       car.update(
-        se, [ RACE_NUM, 'RUN', 'Shea Adam', [122.321, ''] ],
-        se, [ RACE_NUM, 'PIT', 'Shea Adam', [122.321, ''] ],
+        se, [RACE_NUM, 'RUN', 'Shea Adam', [122.321, '']],
+        se, [RACE_NUM, 'PIT', 'Shea Adam', [122.321, '']],
         FlagState.GREEN,
         ARBITRARY_TIMESTAMP + 2
       );
@@ -169,30 +166,28 @@ describe(
       // Two laps across the S/F line, plus one in lap (for which the time has
       // not yet been recorded) - so in lap was lap 3
       expect(stint.endLap).toEqual(3);
-
     });
 
     it('derives pit stops from stints', () => {
-
       const car = Car.create({
-        raceNum: "42",
+        raceNum: '42',
         stints: [
           {
-            car: "42",
+            car: '42',
             startLap: 1,
             endLap: 14,
             startTime: 0,
             endTime: 45
           },
           {
-            car: "42",
+            car: '42',
             startLap: 15,
             endLap: 32,
             startTime: 60,
             endTime: 125
           },
           {
-            car: "42",
+            car: '42',
             startLap: 33,
             startTime: 140
           }
@@ -206,7 +201,6 @@ describe(
       expect(ps1.startTime).toEqual(new Date(45));
       expect(ps1.endTime).toEqual(new Date(60));
       expect(ps1.durationSeconds).toEqual(0.015); // Not very realistic but Date() takes timestamp with ms!
-
     });
 
     it('creates a new stint if necessary at the end of the first lap', () => {
@@ -224,8 +218,8 @@ describe(
       const LAPTIME = 123.456;
 
       car.update(
-        se, [ RACE_NUM, 'RUN', 'Shea Adam', ['', ''] ],
-        se, [ RACE_NUM, 'RUN', 'Shea Adam', [LAPTIME, ''] ],
+        se, [RACE_NUM, 'RUN', 'Shea Adam', ['', '']],
+        se, [RACE_NUM, 'RUN', 'Shea Adam', [LAPTIME, '']],
         FlagState.GREEN,
         ARBITRARY_TIMESTAMP + LAPTIME
       );
@@ -235,7 +229,6 @@ describe(
       expect(car.stints[0].startTime).toEqual(new Date(ARBITRARY_TIMESTAMP));
       expect(car.stints[0].laps.length).toEqual(1);
       expect(car.stints[0].laps[0].laptime).toEqual(LAPTIME);
-
     });
 
     it('creates a new finished stint if car pits at end of first lap', () => {
@@ -251,8 +244,8 @@ describe(
       expect(car.stints.length).toBe(0);
 
       car.update(
-        se, [ RACE_NUM, 'RUN', 'Shea Adam', ['', ''] ],
-        se, [ RACE_NUM, 'PIT', 'Shea Adam', ['', ''] ],
+        se, [RACE_NUM, 'RUN', 'Shea Adam', ['', '']],
+        se, [RACE_NUM, 'PIT', 'Shea Adam', ['', '']],
         FlagState.GREEN,
         ARBITRARY_TIMESTAMP,
         ARBITRARY_TIMESTAMP - 60
@@ -266,7 +259,6 @@ describe(
     });
 
     it('deletes ghost stints on update', () => {
-
       const colSpec = [
         Stat.NUM,
         Stat.STATE,
@@ -295,13 +287,13 @@ describe(
             driver: 0,
             startLap: 1,
             startTime: ARBITRARY_TIMESTAMP
-          },
+          }
         ]
       });
 
       car.update(
-        se, [ RACE_NUM, 'RUN', 'Paul Truswell', ['', ''] ],
-        se, [ RACE_NUM, 'RUN', 'Paul Truswell', [123.456, ''] ],
+        se, [RACE_NUM, 'RUN', 'Paul Truswell', ['', '']],
+        se, [RACE_NUM, 'RUN', 'Paul Truswell', [123.456, '']],
         FlagState.GREEN,
         ARBITRARY_TIMESTAMP + 123.456,
         ARBITRARY_TIMESTAMP - 60
@@ -309,7 +301,6 @@ describe(
 
       expect(car.stints.length).toEqual(1);
       expect(car.stints[0].laps[0].laptime).toEqual(123.456);
-
     });
   }
 );

@@ -19,7 +19,7 @@ describe('Messages', () => {
       {
         messages: [
           [2, 'two', 'two message', 'twoStyle', 'twoCarNum'],
-          [1, 'one', 'one message', 'oneStyle'],
+          [1, 'one', 'one message', 'oneStyle']
         ]
       }
     );
@@ -43,7 +43,7 @@ describe('Messages', () => {
           [6, 'six', 'six message', 'sixStyle'],
           [5, 'five', 'five message', 'fiveStyle'],
           [2, 'two', 'two message', 'twoStyle'],
-          [1, 'one', 'one message', 'oneStyle'],
+          [1, 'one', 'one message', 'oneStyle']
         ]
       }
     );
@@ -69,7 +69,7 @@ describe('Messages', () => {
           [6, 'six', 'six message', 'sixStyle'],
           [5, 'five', 'five message', 'fiveStyle'],
           [2, 'two', 'two message', 'twoStyle'],
-          [1, 'one', 'one message', 'oneStyle'],
+          [1, 'one', 'one message', 'oneStyle']
         ]
       }
     );

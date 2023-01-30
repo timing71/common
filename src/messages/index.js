@@ -8,12 +8,11 @@ import { StopResumeMessage } from './StopResumeMessage.js';
 
 export { Message, RaceControlMessage } from './Message.js';
 
-
 const GLOBAL_GENERATORS = [
   FlagMessage
 ];
 
-const PER_CAR_GENERATORS = [  // Order can be significant (e.g. driver change before pit out!)
+const PER_CAR_GENERATORS = [ // Order can be significant (e.g. driver change before pit out!)
   FastLapMessage,
   PitMessage,
   DriverChangeMessage,

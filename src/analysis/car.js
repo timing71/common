@@ -21,7 +21,7 @@ const Driver = types.model({
       return self.stints.map(s => s.durationLaps || s.laps.length).filter(l => !!l).reduce(sum, 0);
     },
 
-    driveTime(timestamp=null) {
+    driveTime(timestamp = null) {
       return self.stints.map(s => s.durationSeconds || ((timestamp ? timestamp - s.startTime : 0) / 1000)).filter(l => !!l).reduce(sum, 0);
     },
 
@@ -133,14 +133,14 @@ export const Stint = types.model({
       return self.relevantLaps.length > 0 ?
         Math.min(
           ...self.relevantLaps.map(l => l.laptime)
-        )
-      : null;
+        ) :
+        null;
     },
     get meanLap() {
       const greenLaps = self.relevantLaps.filter(l => l.flag === FlagState.GREEN);
       return greenLaps.length > 0 ?
-      (greenLaps.map(l => l.laptime).reduce(sum, 0) / greenLaps.length).toFixed(3)
-    : null;
+          (greenLaps.map(l => l.laptime).reduce(sum, 0) / greenLaps.length).toFixed(3) :
+        null;
     },
     get yellowLaps() {
       return self.relevantLaps.filter(l => FLAG_WEIGHTS[l.flag] >= FLAG_WEIGHTS[FlagState.YELLOW]).length;
@@ -212,13 +212,11 @@ export const Car = types.model({
 
       self.stints[self.stints.length - 1].addLap(newLap);
       self.highestSeenFlagThisLap = 0;
-
     },
 
     update(oldStatExtractor, oldCar, statExtractor, car, currentFlag, timestamp, startTime) {
-
       const currentDriverName = statExtractor.get(car, Stat.DRIVER);
-      let currentDriver = self.drivers.find( d => d.name === currentDriverName );
+      let currentDriver = self.drivers.find(d => d.name === currentDriverName);
       if (!!currentDriverName && !currentDriver) {
         currentDriver = Driver.create({
           idx: self.drivers.length,
@@ -261,7 +259,7 @@ export const Car = types.model({
               endLap: self.currentLap,
               driver: currentDriver,
               car: self,
-              startTime: startTime,
+              startTime,
               endTime: timestamp
             })
           );
@@ -294,7 +292,7 @@ export const Car = types.model({
       if (oldStatExtractor && oldCar) {
         const oldLastLap = oldStatExtractor.get(oldCar, Stat.LAST_LAP, []);
 
-        if (newLastLap && newLastLap[0] && (!oldLastLap || oldLastLap[0] !== newLastLap[0]) ) {
+        if (newLastLap && newLastLap[0] && (!oldLastLap || oldLastLap[0] !== newLastLap[0])) {
           self.recordNewLap(newLastLap[0], currentDriver, self.highestSeenFlagThisLap, timestamp);
           if (fudgeLapCount) {
             self.currentLap++;
@@ -321,8 +319,7 @@ export const Car = types.model({
         // of a session?
         destroy(self.stints[0]);
       }
-
-    },
+    }
 
     // NB We don't need a reset method here; resetting the parent `Cars` collection
     // simply wipes away previous `Car`s

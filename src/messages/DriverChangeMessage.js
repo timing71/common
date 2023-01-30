@@ -1,5 +1,5 @@
 import { Stat } from '../racing.js';
-import { Message } from "./Message.js";
+import { Message } from './Message.js';
 
 export const DriverChangeMessage = (se, oldCar, newCar) => {
   const oldDriver = se.get(oldCar, Stat.DRIVER);

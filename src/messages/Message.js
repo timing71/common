@@ -1,5 +1,5 @@
 export class Message {
-  constructor(category, message, style, carNum=null, timestamp=null) {
+  constructor(category, message, style, carNum = null, timestamp = null) {
     this.category = category;
     this.message = message;
     this.style = style;
@@ -27,8 +27,7 @@ export class Message {
 const CAR_NUMBER_REGEX = /car #? ?(?<carNum>[0-9]+)/i;
 
 export class RaceControlMessage extends Message {
-  constructor(message, timestamp=null) {
-
+  constructor(message, timestamp = null) {
     const carNumMatch = message.match(CAR_NUMBER_REGEX);
 
     super('Race Control', message.toUpperCase(), 'raceControl', carNumMatch?.groups?.carNum, timestamp);

@@ -5,7 +5,6 @@ export const CURRENT_VERSION = 3;
 
 const MIGRATIONS = {
   1: (oldState) => {
-
     const migrated = {
       cars: { cars: {} },
       session: {},
@@ -34,7 +33,6 @@ const MIGRATIONS = {
 
     Object.entries(oldState.static).forEach(
       ([raceNum, [raceClass, teamName, make]]) => {
-
         const drivers = oldState.driver[raceNum].map((d, idx) => ({ idx, name: d, car: raceNum }));
 
         const stints =
@@ -44,31 +42,31 @@ const MIGRATIONS = {
           ].filter(
             s => !!s
           ).map(
-          s => {
-            let cumulativeTime = s[1] * 1000;
-            return {
-              startLap: s[0],
-              startTime: s[1] * 1000,
-              endLap: s[2],
-              endTime: s[3] ? s[3] * 1000 : undefined,
-              driver: s[5],
-              car: raceNum,
-              laps: s[9].map(
-                ([laptime, flag], idx) => {
-                  cumulativeTime += laptime * 1000;
-                  return {
-                    lapNumber: s[0] + idx,
-                    laptime,
-                    driver: s[5],
-                    flag: INVERSE_FLAG_MAP[flag],
-                    car: raceNum,
-                    timestamp: cumulativeTime // NB this is APPROXIMATE as this value was not stored in the v1 file
-                  };
-                }
-              )
-            };
-          }
-        );
+            s => {
+              let cumulativeTime = s[1] * 1000;
+              return {
+                startLap: s[0],
+                startTime: s[1] * 1000,
+                endLap: s[2],
+                endTime: s[3] ? s[3] * 1000 : undefined,
+                driver: s[5],
+                car: raceNum,
+                laps: s[9].map(
+                  ([laptime, flag], idx) => {
+                    cumulativeTime += laptime * 1000;
+                    return {
+                      lapNumber: s[0] + idx,
+                      laptime,
+                      driver: s[5],
+                      flag: INVERSE_FLAG_MAP[flag],
+                      car: raceNum,
+                      timestamp: cumulativeTime // NB this is APPROXIMATE as this value was not stored in the v1 file
+                    };
+                  }
+                )
+              };
+            }
+          );
 
         migrated.cars.cars[raceNum] = {
           raceNum,
@@ -123,7 +121,6 @@ const MIGRATIONS = {
     migrated.state = oldState.state;
 
     return migrated;
-
   },
   2: (oldState) => {
     const migrated = {
@@ -132,20 +129,18 @@ const MIGRATIONS = {
     };
 
     if (migrated.cars) {
-      const earliestTimestamp = Math.min(...Object.values(migrated.cars.cars).map(c => Math.min(...c.stints.map( s => s.startTime ))));
+      const earliestTimestamp = Math.min(...Object.values(migrated.cars.cars).map(c => Math.min(...c.stints.map(s => s.startTime))));
       migrated.manifest.startTime = earliestTimestamp;
     }
-
 
     return migrated;
   }
 };
 
 export const migrateAnalysisState = (oldState) => {
-
   let migrated = oldState;
 
-  while(
+  while (
     (migrated.version || 1) < CURRENT_VERSION &&
     MIGRATIONS[migrated.version || 1]
   ) {

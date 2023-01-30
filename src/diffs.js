@@ -7,8 +7,8 @@
   I say "roughly compatible" - compatible in as far as is required to support
   iframes in timing recordings, e.g. at a very basic level.
  */
-export const dotLookup = (dest, path, parent=false) => {
-  if (path === "" || path === []) {
+export const dotLookup = (dest, path, parent = false) => {
+  if (path === '' || path === []) {
     return dest;
   }
 
@@ -20,7 +20,7 @@ export const dotLookup = (dest, path, parent=false) => {
     isArray = true;
   }
   else {
-    nodes = path.split(".");
+    nodes = path.split('.');
   }
 
   if (parent) {
@@ -59,7 +59,7 @@ const change = (dest, path, changes) => {
     parentNode = path[path.length - 1];
   }
   else {
-    const ppath = path.split(".");
+    const ppath = path.split('.');
     parentNode = ppath.slice(-1);
   }
 
@@ -81,7 +81,6 @@ const PATCHERS = {
   remove
 };
 
-
 export function patch(diffResult, target) {
   const dest = JSON.parse(JSON.stringify(target));
 
@@ -95,27 +94,25 @@ export function patch(diffResult, target) {
 }
 
 export function diff(first, second) {
-
-  const _diff_recursive = (first, second, node=[]) => {
+  const _diffRecursive = (first, second, node = []) => {
     let result = [];
 
-    const dottedNode = node.every(n => typeof(n) === 'string') ? node.join('.') : node;
-    let intersection = [], addition = [], deletion = [];
+    const dottedNode = node.every(n => typeof (n) === 'string') ? node.join('.') : node;
+    let intersection = []; let addition = []; let deletion = [];
     let differ = false;
 
-    if (typeof(first) === 'object' && typeof(second) === 'object') {
+    if (typeof (first) === 'object' && typeof (second) === 'object') {
       if (Array.isArray(first) && Array.isArray(second)) {
-
-        const lenFirst = first.length, lenSecond = second.length;
+        const lenFirst = first.length; const lenSecond = second.length;
         intersection = range(0, Math.min(lenFirst, lenSecond));
         addition = range(Math.min(lenFirst, lenSecond), lenSecond);
         deletion = range(Math.min(lenFirst, lenSecond), lenFirst).reverse();
         differ = true;
       }
       else {
-        intersection = Object.keys(first).filter(f => second.hasOwnProperty(f));
-        addition = Object.keys(second).filter(f => !first.hasOwnProperty(f));
-        deletion = Object.keys(first).filter(f => !second.hasOwnProperty(f));
+        intersection = Object.keys(first).filter(f => Object.prototype.hasOwnProperty.call(second, f));
+        addition = Object.keys(second).filter(f => !Object.prototype.hasOwnProperty.call(first, f));
+        deletion = Object.keys(first).filter(f => !Object.prototype.hasOwnProperty.call(second, f));
         differ = true;
       }
     }
@@ -125,8 +122,8 @@ export function diff(first, second) {
         key => {
           result = [
             ...result,
-            ..._diff_recursive(first[key], second[key], [...node, key])
-          ]
+            ..._diffRecursive(first[key], second[key], [...node, key])
+          ];
         }
       );
 
@@ -140,15 +137,15 @@ export function diff(first, second) {
     }
     else {
       if (first !== second) {
-        result.push(['change', dottedNode, [first, second]])
+        result.push(['change', dottedNode, [first, second]]);
       }
     }
 
     return result;
-  }
+  };
 
-  return _diff_recursive(first, second, []);
+  return _diffRecursive(first, second, []);
 }
 
 const range = (start, stop, step = 1) =>
-  Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
+  Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step);

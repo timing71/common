@@ -1,7 +1,7 @@
 import { Stat } from './racing.js';
 
 export class StatExtractor {
-  constructor(columnSpec=[]) {
+  constructor(columnSpec = []) {
     this._colSpec = columnSpec;
     this._reverseMap = {};
     columnSpec.forEach(
@@ -13,14 +13,14 @@ export class StatExtractor {
     this.findCarInList = this.findCarInList.bind(this);
   }
 
-  get(car, stat, defaultValue=null) {
+  get(car, stat, defaultValue = null) {
     if (this._reverseMap[stat] !== undefined) {
       return car[this._reverseMap[stat]] || defaultValue;
     }
     return defaultValue;
   }
 
-  findCarInList(car, cars=[]) {
+  findCarInList(car, cars = []) {
     // You'd have hoped that race number would be enough to uniquely
     // identify a car within a session, right? You'd be wrong...
     const wantedNum = this.get(car, Stat.NUM);

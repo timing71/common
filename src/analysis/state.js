@@ -1,6 +1,5 @@
 import { FlagState } from '@timing71/common';
-import { types } from "mobx-state-tree";
-
+import { types } from 'mobx-state-tree';
 
 const StateSession = types.model({
   timeElapsed: types.optional(types.union(types.undefined, types.number), 0),
@@ -8,7 +7,6 @@ const StateSession = types.model({
   lapsRemain: types.optional(types.union(types.undefined, types.number), undefined),
   flagState: types.optional(types.enumeration(Object.values(FlagState)), FlagState.NONE)
 });
-
 
 export const State = types.model({
   cars: types.optional(types.frozen(), []),

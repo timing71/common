@@ -1,6 +1,6 @@
-import deepEqual from "deep-equal";
+import deepEqual from 'deep-equal';
 
-import { generateMessages } from "./messages/index.js";
+import { generateMessages } from './messages/index.js';
 
 export const SERVICE_PROVIDERS = [];
 
@@ -8,7 +8,7 @@ export const registerServiceProvider = (serviceClass) => {
   if (!SERVICE_PROVIDERS.includes(serviceClass)) {
     SERVICE_PROVIDERS.push(serviceClass);
   }
-}
+};
 
 export const serviceProviderCount = () => SERVICE_PROVIDERS.length;
 
@@ -33,7 +33,7 @@ export const processStateUpdate = (oldState, updatedState) => {
   const newState = { ...oldState, ...updatedState };
 
   const newMessages = generateMessages(newState.manifest, oldState, newState).concat(
-    updatedState.extraMessages || [],
+    updatedState.extraMessages || []
   );
 
   const highlight = [];
@@ -62,7 +62,7 @@ export const processStateUpdate = (oldState, updatedState) => {
 export const processManifestUpdate = (oldManifest, newManifest, startTime, uuid, callback) => {
   const newManifestWithStartTime = {
     ...newManifest,
-    startTime: startTime,
+    startTime,
     uuid
   };
 
@@ -84,6 +84,7 @@ export class Service {
   start(connectionService) {
     this.connectionService = connectionService;
   }
+
   stop() {}
 }
 
@@ -111,7 +112,7 @@ export class HTTPPollingService extends Service {
   }
 
   async _fetch() {
-    const myUrl = (typeof(this.url) === 'function') ? this.url() : this.url;
+    const myUrl = (typeof this.url === 'function') ? this.url() : this.url;
     try {
       const response = await this.connectionService.fetch(myUrl);
       this.handleResponse(response);

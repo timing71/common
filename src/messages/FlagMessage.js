@@ -1,12 +1,11 @@
 import { FlagState } from '../racing.js';
-import { Message } from "./Message.js";
+import { Message } from './Message.js';
 
 export const FlagMessage = (manifest, oldState, newState) => {
-
   const newFlag = newState.session?.flagState;
 
   if (oldState.session?.flagState && oldState.session.flagState !== newFlag) {
-    switch(newFlag) {
+    switch (newFlag) {
       case FlagState.GREEN:
         return new Message('Track', 'Green flag - track clear', 'green');
       case FlagState.SC:
@@ -22,11 +21,11 @@ export const FlagMessage = (manifest, oldState, newState) => {
       case FlagState.RED:
         return new Message('Track', 'Red flag', 'red');
       case FlagState.CHEQUERED:
-        return new Message("Track", "Chequered flag", "track");
+        return new Message('Track', 'Chequered flag', 'track');
       case FlagState.CODE_60:
-        return new Message("Track", "Code 60", "code60");
+        return new Message('Track', 'Code 60', 'code60');
       case FlagState.WHITE:
-        return new Message("Track", "White flag - final lap", "white");
+        return new Message('Track', 'White flag - final lap', 'white');
       default:
     }
   }

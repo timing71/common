@@ -1,5 +1,5 @@
-import { Stat } from "../racing.js";
-import { Message } from "./Message.js";
+import { Stat } from '../racing.js';
+import { Message } from './Message.js';
 
 export const PitMessage = (se, oldCar, newCar) => {
   const oldState = se.get(oldCar, Stat.STATE);
@@ -7,7 +7,6 @@ export const PitMessage = (se, oldCar, newCar) => {
   const carNum = se.get(newCar, Stat.NUM);
 
   if (oldState !== newState && !!carNum && oldState !== 'N/S') {
-
     const driver = se.get(newCar, Stat.DRIVER);
     const clazz = se.get(newCar, Stat.CLASS, 'Pits');
 

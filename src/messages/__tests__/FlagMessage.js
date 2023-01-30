@@ -7,7 +7,7 @@ const FLAG_EXPECTATIONS = [
   [FlagState.GREEN, FlagState.VSC, 'Virtual safety car deployed'],
   [FlagState.GREEN, FlagState.RED, 'Red flag'],
   [FlagState.RED, FlagState.GREEN, 'Green flag - track clear'],
-  [FlagState.CODE_60, FlagState.CHEQUERED, 'Chequered flag'],
+  [FlagState.CODE_60, FlagState.CHEQUERED, 'Chequered flag']
 ];
 
 FLAG_EXPECTATIONS.forEach(
@@ -18,7 +18,7 @@ FLAG_EXPECTATIONS.forEach(
         const msgs = generateMessages(
           {},
           { session: { flagState: from } },
-          { session: { flagState: to } },
+          { session: { flagState: to } }
         );
         expect(msgs.length).toEqual(1);
         expect(msgs[0][2]).toEqual(message);

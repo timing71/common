@@ -7,7 +7,6 @@ export const Cars = types.model({
 }).actions(
   self => ({
     update(oldState, newState) {
-
       if (newState.manifest?.colSpec) {
         const statExtractor = new StatExtractor(newState.manifest.colSpec);
 
@@ -37,7 +36,6 @@ export const Cars = types.model({
           }
         );
       }
-
     },
 
     reset() {

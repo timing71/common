@@ -1,5 +1,5 @@
-import { FlagState } from "../../racing.js";
-import { Session } from "../session";
+import { FlagState } from '../../racing.js';
+import { Session } from '../session';
 
 describe('Session', () => {
   it('records changes in flag state', () => {
@@ -42,7 +42,6 @@ describe('Session', () => {
     expect(flagStat.startTime).toEqual(new Date(5000));
     expect(flagStat.endTime).toEqual(new Date(15000));
     expect(flagStat.secondsDuration).toEqual(10);
-
   });
 
   it('calculates aggregated flag statistics', () => {
@@ -50,7 +49,7 @@ describe('Session', () => {
       flagStats: [
         { flag: FlagState.GREEN, startLap: 0, startTime: 0, endLap: 5, endTime: 5000 },
         { flag: FlagState.YELLOW, startLap: 5, startTime: 5000, endLap: 7, endTime: 8000 },
-        { flag: FlagState.GREEN, startLap: 7, startTime: 8000 },
+        { flag: FlagState.GREEN, startLap: 7, startTime: 8000 }
       ]
     });
 
@@ -59,7 +58,6 @@ describe('Session', () => {
     expect(agg[FlagState.GREEN].count).toEqual(2);
     expect(agg[FlagState.GREEN].laps).toEqual(5);
     expect(agg[FlagState.YELLOW].time).toEqual(3000);
-
   });
 
   it('records the initial flag state', () => {
@@ -82,7 +80,6 @@ describe('Session', () => {
 
     expect(session.flagStats.length).toEqual(1);
     expect(session.flagStats[0].startTime).toEqual(new Date(1000));
-
   }
 
   );

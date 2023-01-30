@@ -11,7 +11,6 @@ import { State } from './state.js';
 
 import { CURRENT_VERSION, migrateAnalysisState } from './migrate.js';
 
-
 const MIN_LAPS_REQUIRED_FOR_PREDICTION = 10;
 
 const Analyser = types.model({
@@ -24,13 +23,11 @@ const Analyser = types.model({
   version: types.optional(types.literal(CURRENT_VERSION), CURRENT_VERSION)
 }).extend(
   self => {
-
     let liveMode = false;
 
     return {
       actions: {
         updateState: (oldState, newState, timestamp) => {
-
           if (newState?.manifest && oldState?.manifest) {
             self.cars.update(oldState, newState);
             self.messages.update(oldState, newState);
@@ -46,8 +43,6 @@ const Analyser = types.model({
               self.session.setLeaderLap(maxLap);
             }
           }
-
-
         },
 
         reset: () => {
@@ -115,8 +110,8 @@ const Analyser = types.model({
           return self.state.cars.map(
             c => self.cars.get(se.get(c, Stat.NUM))
           ).filter(
-            c => !!c  // Not sure why this sometimes happens - perhaps a race
-                      // condition where we haven't fully loaded data yet?
+            c => !!c // Not sure why this sometimes happens - perhaps a race
+            // condition where we haven't fully loaded data yet?
           );
         },
 
@@ -126,13 +121,12 @@ const Analyser = types.model({
             ...new Set(
               self.state.cars.map(
                 c => se.get(c, Stat.CLASS)
-              ).filter( c => !!c )
+              ).filter(c => !!c)
             )
           ];
         }
       }
     };
-
   });
 
 export const createAnalyser = (initialState, live) => {
