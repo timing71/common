@@ -1,5 +1,5 @@
-import { generateMessages } from '../';
-import { Stat } from '@timing71/common';
+import { generateMessages } from '..';
+import { Stat } from '../../racing.js';
 
 it('generates car message on pit in', () => {
   const colSpec = [Stat.NUM, Stat.STATE, Stat.CLASS, Stat.DRIVER];

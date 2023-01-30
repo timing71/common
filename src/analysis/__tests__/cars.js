@@ -1,5 +1,5 @@
 import { Stat } from '../../racing.js';
-import { Cars } from '../cars';
+import { Cars } from '../cars.js';
 
 const COLUMN_SPEC = [
   Stat.NUM,

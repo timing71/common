@@ -1,4 +1,4 @@
-import { createIframe } from '../replay';
+import { createIframe } from '../replay.js';
 
 describe('Replay module', () => {
   describe('creation of iframes', () => {

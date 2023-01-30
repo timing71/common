@@ -1,4 +1,4 @@
-import { RaceControlMessage } from '../Message';
+import { RaceControlMessage } from '../Message.js';
 
 it('extracts car numbers from message text', () => {
   expect(new RaceControlMessage('Drive-through penalty for car #1234 for being too blue').carNum).toEqual('1234');

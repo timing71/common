@@ -1,5 +1,5 @@
 import { Message as CTFMessage } from '../../messages/index.js';
-import { Messages, Message } from '../messages';
+import { Messages, Message } from '../messages.js';
 
 describe('Message', () => {
   it('can be instantiated with a CTF Message object', () => {

@@ -12,12 +12,14 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: [
+    'import',
     'jest'
   ],
   rules: {
     'brace-style': ['error', 'stroustrup'],
     'dot-notation': 'off',
     'operator-linebreak': ['warn', 'after'],
+    'import/extensions': ['error', 'ignorePackages'],
     'quote-props': 'off',
     'semi': ['warn', 'always'],
     'space-before-function-paren': ['error', 'never']

@@ -1,5 +1,5 @@
 import { FlagState } from '../../racing.js';
-import { Session } from '../session';
+import { Session } from '../session.js';
 
 describe('Session', () => {
   it('records changes in flag state', () => {

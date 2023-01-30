@@ -1,4 +1,4 @@
-import { diff, patch } from '../diffs';
+import { diff, patch } from '../diffs.js';
 
 describe('Diffing', () => {
   it('works on primitives', () => {
