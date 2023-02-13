@@ -101,7 +101,7 @@ export function diff(first, second) {
     let intersection = []; let addition = []; let deletion = [];
     let differ = false;
 
-    if (typeof (first) === 'object' && typeof (second) === 'object') {
+    if (first && second && typeof (first) === 'object' && typeof (second) === 'object') {
       if (Array.isArray(first) && Array.isArray(second)) {
         const lenFirst = first.length; const lenSecond = second.length;
         intersection = range(0, Math.min(lenFirst, lenSecond));
