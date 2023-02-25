@@ -3,15 +3,17 @@ import { diff, patch } from './diffs.js';
 
 export const REPLAY_FRAME_REGEX = /^([0-9]{5,11})(i?).json$/;
 
-class Replay {
+export class Replay {
   constructor(zipFile) {
     this._file = zipFile;
     this._keyframes = {};
     this._iframes = {};
+
+    this.forEachFrame = this.forEachFrame.bind(this);
   }
 
   async _init() {
-    const entries = await this._file.getEntries();
+    const entries = await this.listEntries();
 
     await Promise.all(
       entries.map(
@@ -57,6 +59,10 @@ class Replay {
     this.manifest.startTime = firstFrame;
   }
 
+  async listEntries() {
+    return await this._file.getEntries();
+  }
+
   async readEntry(e) {
     const text = await e.getData(new TextWriter());
     return JSON.parse(text);
@@ -81,11 +87,51 @@ class Replay {
       myState = await applyIframe(myState, ifrState);
     }
 
+    if (!myState.manifest) {
+      myState.manifest = this.manifest;
+    }
+
+    if (!myState.lastUpdated) {
+      myState.lastUpdated = time;
+    }
+
     return myState;
   }
 
   async getStateAtRelative(relTime) {
     return await this.getStateAt(this.manifest.startTime + relTime);
+  }
+
+  async forEachFrame(callback) {
+    const keyframes = Object.keys(this._keyframes).map(k => parseInt(k, 10)).sort();
+    const iframes = Object.keys(this._iframes).map(k => parseInt(k, 10)).sort();
+
+    let prevFrame = null;
+    while (keyframes.length > 0) {
+      const k = keyframes.shift();
+
+      const kf = await this.readEntry(this._keyframes[k]);
+
+      prevFrame = kf;
+
+      if (!prevFrame.manifest) {
+        prevFrame.manifest = this.manifest;
+      }
+
+      if (!prevFrame.lastUpdated) {
+        prevFrame.lastUpdated = k;
+      }
+
+      callback(kf, k);
+
+      while (iframes.length > 0 && (keyframes.length === 0 || iframes[0] < keyframes[0])) {
+        const i = iframes.shift();
+        const ifr = await this.readEntry(this._iframes[i]);
+        prevFrame = await applyIframe(prevFrame, ifr);
+        prevFrame.lastUpdated = i;
+        callback(prevFrame, i);
+      }
+    }
   }
 }
 
@@ -93,6 +139,7 @@ const applyIframe = (base, iframe) => {
   return new Promise(
     (resolve) => {
       const result = {
+        ...base,
         cars: patch(iframe['cars'], base['cars']),
         session: patch(iframe['session'], base['session']),
         messages: iframe['messages'].concat(base['messages']).slice(0, 100),
