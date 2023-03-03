@@ -2,9 +2,9 @@ import { FlagState } from '@timing71/common';
 import { types } from 'mobx-state-tree';
 
 const StateSession = types.model({
-  timeElapsed: types.optional(types.union(types.undefined, types.number), 0),
-  timeRemain: types.optional(types.union(types.undefined, types.number), 0),
-  lapsRemain: types.optional(types.union(types.undefined, types.number), undefined),
+  timeElapsed: types.optional(types.union(types.undefined, types.number, types.null), 0),
+  timeRemain: types.optional(types.union(types.undefined, types.number, types.null), 0),
+  lapsRemain: types.optional(types.union(types.undefined, types.number, types.null), undefined),
   flagState: types.optional(types.enumeration(Object.values(FlagState)), FlagState.NONE)
 });
 
