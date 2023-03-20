@@ -128,9 +128,9 @@ const MIGRATIONS = {
       version: 3
     };
 
-    if (migrated.cars) {
+    if (migrated.cars && !migrated.manifest.startTime) {
       const earliestTimestamp = Math.min(...Object.values(migrated.cars.cars).map(c => Math.min(...c.stints.map(s => s.startTime))));
-      migrated.manifest.startTime = earliestTimestamp;
+      migrated.manifest.startTime = Math.floor(earliestTimestamp / 1000);
     }
 
     return migrated;
