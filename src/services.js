@@ -1,5 +1,6 @@
 import deepEqual from 'deep-equal';
 
+import { EventEmitter } from './eventEmitter.js';
 import { generateMessages } from './messages/index.js';
 
 export const SERVICE_PROVIDERS = [];
@@ -29,56 +30,77 @@ export const mapServiceProvider = (source) => {
   }
 };
 
-export const processStateUpdate = (oldState, updatedState) => {
-  const newState = { ...oldState, ...updatedState };
-
-  const newMessages = generateMessages(newState.manifest, oldState, newState).concat(
-    updatedState.extraMessages || []
-  );
-
-  const highlight = [];
-  newMessages.forEach(
-    nm => {
-      if (nm.length >= 5) {
-        highlight.push(nm[4]);
-      }
-    }
-  );
-  newState.highlight = highlight;
-
-  newState.messages = [
-    ...newMessages,
-    ...(oldState?.messages || [])
-  ].slice(0, 100);
-
-  newState.lastUpdated = Date.now();
-  delete newState.extraMessages;
-
-  return newState;
+export const Events = {
+  MANIFEST_CHANGE: 'manifestChange',
+  SESSION_CHANGE: 'sessionChange',
+  STATE_CHANGE: 'stateChange'
 };
 
-// Adds start time and UUID to the manifest, and if a deep equality check fails,
-// calls `callback` with the new manifest.
-export const processManifestUpdate = (oldManifest, newManifest, startTime, uuid, callback) => {
-  const newManifestWithStartTime = {
-    ...newManifest,
-    startTime,
-    uuid
-  };
-
-  if (!deepEqual(newManifestWithStartTime, oldManifest)) {
-    callback(newManifestWithStartTime);
-  }
-};
-
-export class Service {
-  constructor(onStateChange, onManifestChange, service) {
-    this.onManifestChange = onManifestChange;
-    this.onStateChange = onStateChange;
+export class Service extends EventEmitter {
+  constructor(service) {
+    super();
     this.service = service;
 
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
+
+    this.onManifestChange = this.onManifestChange.bind(this);
+    this.onSessionChange = this.onSessionChange.bind(this);
+    this.onStateChange = this.onStateChange.bind(this);
+
+    this._prevState = {};
+  }
+
+  onSessionChange() {
+    this.service = {
+      ...this.service,
+      currentSessionIndex: (this.service.currentSessionIndex || 0) + 1
+    };
+    this.emit(Events.SESSION_CHANGE, this.service.currentSessionIndex);
+  }
+
+  onStateChange(updatedState) {
+    const newState = { ...this._prevState, ...updatedState };
+
+    const newMessages = generateMessages(newState.manifest, this._prevState, newState).concat(
+      updatedState.extraMessages || []
+    );
+
+    const highlight = [];
+    newMessages.forEach(
+      nm => {
+        if (nm.length >= 5) {
+          highlight.push(nm[4]);
+        }
+      }
+    );
+    newState.highlight = highlight;
+
+    newState.messages = [
+      ...newMessages,
+      ...(this._prevState?.messages || [])
+    ].slice(0, 100);
+
+    newState.lastUpdated = Date.now();
+    delete newState.extraMessages;
+
+    this.emit(Events.STATE_CHANGE, newState);
+    this._prevState = newState;
+  }
+
+  // Adds start time and UUID to the manifest, and if a deep equality check fails,
+  // emits an event with the new manifest then updates our state.
+  onManifestChange(newManifest) {
+    const newManifestWithStartTime = {
+      ...newManifest,
+      startTime: this.service.startTime,
+      uuid: this.service.uuid
+    };
+
+    if (!deepEqual(newManifestWithStartTime, this._prevState.manifest)) {
+      this.emit(Events.MANIFEST_CHANGE, newManifestWithStartTime);
+      this.onStateChange({ manifest: newManifestWithStartTime });
+    }
   }
 
   start(connectionService) {
@@ -89,8 +111,8 @@ export class Service {
 }
 
 export class HTTPPollingService extends Service {
-  constructor(url, pollInterval, onStateChange, onManifestChange, service) {
-    super(onStateChange, onManifestChange, service);
+  constructor(url, pollInterval, service) {
+    super(service);
     this.url = url;
     this.pollInterval = pollInterval;
     this.handleResponse = this.handleResponse.bind(this);
