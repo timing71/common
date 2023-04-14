@@ -30,9 +30,30 @@ export const mapServiceProvider = (source) => {
   }
 };
 
+/**
+ * Enumerates the events that may be emitted by a {@link Service}.
+ */
 export const Events = {
+  /**
+   * Emitted when the service manifest has changed, with the new manifest as its
+   * argument.
+   *
+   * @param {object} manifest The new service manifest.
+   */
   MANIFEST_CHANGE: 'manifestChange',
+  /**
+   * Emitted when the service detects a session change, with the new session
+   * index (integer) as its argument.
+   *
+   * @param {integer} sessionIndex Numeric index of the new session.
+   */
   SESSION_CHANGE: 'sessionChange',
+  /**
+   * Emitted when the service state has changed, with the new state as its
+   * argument.
+   *
+   * @param {object} state The new service state.
+   */
   STATE_CHANGE: 'stateChange'
 };
 
@@ -47,6 +68,8 @@ export class Service extends EventEmitter {
     this.onManifestChange = this.onManifestChange.bind(this);
     this.onSessionChange = this.onSessionChange.bind(this);
     this.onStateChange = this.onStateChange.bind(this);
+    this.getTransientStateForSaving = this.getTransientStateForSaving.bind(this);
+    this.restoreTransientState = this.restoreTransientState.bind(this);
 
     this._prevState = initialState;
   }
@@ -88,8 +111,10 @@ export class Service extends EventEmitter {
     this._prevState = newState;
   }
 
-  // Adds start time and UUID to the manifest, and if a deep equality check fails,
-  // emits an event with the new manifest then updates our state.
+  /**
+   * Adds start time and UUID to the manifest, and if a deep equality check
+   * fails, emits an event with the new manifest then updates our state.
+   */
   onManifestChange(newManifest) {
     const newManifestWithStartTime = {
       ...newManifest,
@@ -108,6 +133,41 @@ export class Service extends EventEmitter {
   }
 
   stop() {}
+
+  /**
+   * Allows a service to persist parts of its internal, transient state
+   * between instances. Will be periodically called by the service-running
+   * code, which is responsible for persisting the data.
+   *
+   * "Internal, transient state" does not include the main service state emitted
+   * by the `{@link Events#STATE_CHANGE}` event, but rather any internal structures
+   * tracking data about the session that may be used to derive the service
+   * state. Some timing providers, for example, don't provide "best sector time"
+   * information for cars except when they have just set such a time, so a
+   * service may wish to track these sector times separately.
+   *
+   * May optionally be implemented by subclasses; the default implementation
+   * returns `undefined`.
+   *
+   * @returns any
+  */
+  getTransientStateForSaving() {
+    return undefined;
+  }
+
+  /**
+   * Can be called by service-running code to restore this service's internal
+   * state. The provided `state` should be an object previously returned by
+   * `{@link #getTransientStateForSaving}`.
+   *
+   * May optionally be implemented by subclasses; the default implementation
+   * does nothing.
+   *
+   * @param {object} state
+   */
+  restoreTransientState(state) {
+    // To optionally be implemented by subclasses
+  }
 }
 
 export class HTTPPollingService extends Service {
