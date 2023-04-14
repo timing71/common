@@ -49,6 +49,9 @@ const Analyser = types.model({
           self.cars.reset();
           self.messages.reset();
           self.session.reset();
+          self.state = State.create();
+          self.manifest = Manifest.create();
+          self.latestTimestamp = new Date();
         },
 
         setLive(isLive) {
