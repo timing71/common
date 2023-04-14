@@ -37,7 +37,7 @@ export const Events = {
 };
 
 export class Service extends EventEmitter {
-  constructor(service) {
+  constructor(service, initialState = {}) {
     super();
     this.service = service;
 
@@ -48,7 +48,7 @@ export class Service extends EventEmitter {
     this.onSessionChange = this.onSessionChange.bind(this);
     this.onStateChange = this.onStateChange.bind(this);
 
-    this._prevState = {};
+    this._prevState = initialState;
   }
 
   onSessionChange() {
