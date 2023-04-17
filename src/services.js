@@ -5,15 +5,34 @@ import { generateMessages } from './messages/index.js';
 
 export const SERVICE_PROVIDERS = [];
 
-export const registerServiceProvider = (serviceClass) => {
+/**
+ * Call with a {@link Service} class (not an instance) to add that service to the
+ * provider registry. You need to do this once for each service class you wish
+ * to add, typically during the initialisation of your program.
+ *
+ * @param {Service} serviceClass A class that extends {@link Service}.
+ */
+export function registerServiceProvider(serviceClass) {
   if (!SERVICE_PROVIDERS.includes(serviceClass)) {
     SERVICE_PROVIDERS.push(serviceClass);
   }
 };
 
-export const serviceProviderCount = () => SERVICE_PROVIDERS.length;
+/**
+ * Return the number of service providers currently registered.
+ * @returns integer
+ */
+export function serviceProviderCount() {
+  return SERVICE_PROVIDERS.length;
+}
 
-export const mapServiceProvider = (source) => {
+/**
+ *
+ * @param {string} source Source URL for timing data
+ * @returns {Source | null} The service provider corresponding to the source URL
+ *   if one exists, or `null` otherwise.
+ */
+export function mapServiceProvider(source) {
   if (source.slice(0, 4) === 't71 ') {
     const providerClass = source.slice(4, source.indexOf(':'));
     for (let i = 0; i < SERVICE_PROVIDERS.length; i++) {
@@ -32,6 +51,9 @@ export const mapServiceProvider = (source) => {
 
 /**
  * Enumerates the events that may be emitted by a {@link Service}.
+ *
+ * @readonly
+ * @enum {string}
  */
 export const Events = {
   /**
@@ -57,7 +79,20 @@ export const Events = {
   STATE_CHANGE: 'stateChange'
 };
 
+/**
+ * The base class for all timing service providers.
+ *
+ * Instantiate with a service definition. Add event listeners for the
+ * {@link Events} you want to subscribe to, then call {@link #start()} with a
+ * connection service.
+ */
 export class Service extends EventEmitter {
+  /**
+   * Create a new instance of this Service.
+   *
+   * @param {object} service A service definition (UUID, start time and source URL)
+   * @param {object} initialState Initial state of the service (optional)
+   */
   constructor(service, initialState = {}) {
     super();
     this.service = service;
@@ -128,10 +163,18 @@ export class Service extends EventEmitter {
     }
   }
 
+  /**
+   * Instructs this Service to start collecting and translating timing data.
+   * @param {*} connectionService A `ConnectionService` providing data-access methods
+   */
   start(connectionService) {
     this.connectionService = connectionService;
   }
 
+  /**
+   * Instructs this Service to stop collecting data, cancelling any timeouts and
+   * closing any open connections.
+   */
   stop() {}
 
   /**

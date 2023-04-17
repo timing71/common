@@ -26,7 +26,8 @@
   },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest src/",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "doc": "jsdoc src/"
   },
   "devDependencies": {
     "eslint": "^8.0.1",
@@ -36,6 +37,7 @@
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "jest": "^28.1.2",
+    "jsdoc": "^4.0.2",
     "process": "^0.11.10",
     "web-streams-polyfill": "^3.2.1"
   },

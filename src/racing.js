@@ -1,3 +1,16 @@
+/**
+ * Common stats shown in columns on a timing screen.
+ *
+ * Each stat is a 2- or 3-tuple of (heading, type, description?), where `type`
+ * is intended to give a hint to renderers as to the formatting most useful for
+ * the data.
+ *
+ * It is not required to use members of this enum to form a column spec, but it
+ * is useful for consistency to do so where appropriate stats exist.
+ *
+ * @readonly
+ * @enum {string[]}
+ */
 export const Stat = {
   NUM: ['Num', 'text', 'Car number'],
   STATE: ['State', 'text'],
@@ -42,6 +55,11 @@ export const Stat = {
   NO_TOW_RANK: ['NTR', 'numeric', 'No-tow rank']
 };
 
+/**
+ * Possible flag states for a race session.
+ * @readonly
+ * @enum {string}
+ */
 export const FlagState = {
   NONE: 'none',
   GREEN: 'green',

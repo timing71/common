@@ -1,6 +1,14 @@
 import { Stat } from './racing.js';
 
+/**
+ * Utility class to extract a given {@link Stat} from a car's data given a
+ * column spec.
+ */
 export class StatExtractor {
+  /**
+   * Create a new StatExtractor.
+   * @param {Stat[]} columnSpec Column spec (list of Stats)
+   */
   constructor(columnSpec = []) {
     this._colSpec = columnSpec;
     this._reverseMap = {};
@@ -13,6 +21,13 @@ export class StatExtractor {
     this.findCarInList = this.findCarInList.bind(this);
   }
 
+  /**
+   * Retrieves a given {@link Stat} from the given car data.
+   * @param {any[]} car
+   * @param {Stat} stat
+   * @param {any} defaultValue Default to return if stat is not present.
+   * @returns {any} The given Stat for the given car, or the default value.
+   */
   get(car, stat, defaultValue = null) {
     if (this._reverseMap[stat] !== undefined) {
       return car[this._reverseMap[stat]] || defaultValue;
@@ -20,6 +35,24 @@ export class StatExtractor {
     return defaultValue;
   }
 
+  /**
+   * Uses some unnecessarily complex logic to identify and retrieve a given
+   * car from a list of cars.
+   *
+   * You'd have hoped that a race number alone would be sufficient to uniquely
+   * identify a car in a given session, wouldn't you? Unfortunately, experience
+   * has shown that timing providers are quite happy to have multiple cars on
+   * track at once with the same race number.
+   *
+   * This method tries to match on all of race number, car type and class to
+   * try and identify a unique match. If it can't identify a single matching
+   * car, it will error to the console and return undefined; if it can, it
+   * returns that matching car.
+   *
+   * @param {any[]} car
+   * @param {any[][]} cars
+   * @returns The identified car, or undefined.
+   */
   findCarInList(car, cars = []) {
     // You'd have hoped that race number would be enough to uniquely
     // identify a car within a session, right? You'd be wrong...

@@ -1,4 +1,10 @@
-export const timeInSeconds = (seconds, places = 3) => {
+/**
+ * Attempts to parse a time in seconds from its input.
+ * @param {any} seconds Value to parse
+ * @param {number} places Number of decimal places to display
+ * @returns {number | any} A number if possible, else returns its input.
+ */
+export function timeInSeconds(seconds, places = 3) {
   if (isNaN(seconds) || seconds === '' || seconds === null) {
     return seconds;
   }
@@ -21,7 +27,12 @@ export const timeInSeconds = (seconds, places = 3) => {
   return `${negate}${minutes}:${seconds}`;
 };
 
-export const timeWithHours = (seconds) => {
+/**
+ * Format a time in seconds to HH:MM:SS, allowing HH to be > 23 if needed.
+ * @param {number} seconds
+ * @returns {string} Formatted time HH:MM:SS.
+ */
+export function timeWithHours(seconds) {
   let hours = Math.floor(seconds / 3600);
   seconds -= (3600 * hours);
   let minutes = Math.floor(seconds / 60);
