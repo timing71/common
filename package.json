@@ -12,6 +12,7 @@
     "./messages": "./src/messages/index.js",
     "./polyfill": "./src/polyfill-transformstream.js"
   },
+  "types": "./src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/timing71/common.git"
