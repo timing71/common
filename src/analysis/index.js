@@ -160,4 +160,4 @@ export const createAnalyser = (initialState, live) => {
   }
 };
 
-export { migrateAnalysisState };
+export { CURRENT_VERSION, migrateAnalysisState };
