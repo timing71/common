@@ -5,16 +5,17 @@ export class T71 extends Service {
   start(connectionService) {
     const match = this.service.source.match(T71.regex);
     const ws = connectionService.createWebsocket(`ws://${match.groups.host}:${match.groups.port | 24771}`);
+    let manifest;
 
     ws.on('message', (msg) => {
       const data = msg.data ? JSON.parse(msg.data) : JSON.parse(msg.toString());
-
       switch (data.type) {
         case 'MANIFEST_UPDATE':
+          manifest = { ...data.manifest };
           this.emit(Events.MANIFEST_CHANGE, data.manifest);
           break;
         case 'STATE_UPDATE':
-          this.emit(Events.STATE_CHANGE, data.state);
+          this.emit(Events.STATE_CHANGE, { ...data.state, manifest });
           break;
         case 'ANALYSIS_STATE':
           this.emit(Events.ANALYSIS_STATE, data.data);
