@@ -1,0 +1,29 @@
+/**
+ * Enumerates the events that may be emitted by a {@link Service}.
+ *
+ * @readonly
+ * @enum {string}
+ */
+export const Events = {
+  /**
+   * Emitted when the service manifest has changed, with the new manifest as its
+   * argument.
+   *
+   * @param {object} manifest The new service manifest.
+   */
+  MANIFEST_CHANGE: 'manifestChange',
+  /**
+   * Emitted when the service detects a session change, with the new session
+   * index (integer) as its argument.
+   *
+   * @param {integer} sessionIndex Numeric index of the new session.
+   */
+  SESSION_CHANGE: 'sessionChange',
+  /**
+   * Emitted when the service state has changed, with the new state as its
+   * argument.
+   *
+   * @param {object} state The new service state.
+   */
+  STATE_CHANGE: 'stateChange'
+};

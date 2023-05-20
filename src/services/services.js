@@ -1,83 +1,8 @@
 import deepEqual from 'deep-equal';
 
-import { EventEmitter } from './eventEmitter.js';
-import { generateMessages } from './messages/index.js';
-
-export const SERVICE_PROVIDERS = [];
-
-/**
- * Call with a {@link Service} class (not an instance) to add that service to the
- * provider registry. You need to do this once for each service class you wish
- * to add, typically during the initialisation of your program.
- *
- * @param {Service} serviceClass A class that extends {@link Service}.
- */
-export function registerServiceProvider(serviceClass) {
-  if (!SERVICE_PROVIDERS.includes(serviceClass)) {
-    SERVICE_PROVIDERS.push(serviceClass);
-  }
-};
-
-/**
- * Return the number of service providers currently registered.
- * @returns integer
- */
-export function serviceProviderCount() {
-  return SERVICE_PROVIDERS.length;
-}
-
-/**
- *
- * @param {string} source Source URL for timing data
- * @returns {Source | null} The service provider corresponding to the source URL
- *   if one exists, or `null` otherwise.
- */
-export function mapServiceProvider(source) {
-  if (source.slice(0, 4) === 't71 ') {
-    const providerClass = source.slice(4, source.indexOf(':'));
-    for (let i = 0; i < SERVICE_PROVIDERS.length; i++) {
-      if (SERVICE_PROVIDERS[i].name === providerClass) {
-        return SERVICE_PROVIDERS[i];
-      }
-    }
-  }
-
-  for (let i = 0; i < SERVICE_PROVIDERS.length; i++) {
-    if (source.search(SERVICE_PROVIDERS[i].regex) >= 0) {
-      return SERVICE_PROVIDERS[i];
-    }
-  }
-};
-
-/**
- * Enumerates the events that may be emitted by a {@link Service}.
- *
- * @readonly
- * @enum {string}
- */
-export const Events = {
-  /**
-   * Emitted when the service manifest has changed, with the new manifest as its
-   * argument.
-   *
-   * @param {object} manifest The new service manifest.
-   */
-  MANIFEST_CHANGE: 'manifestChange',
-  /**
-   * Emitted when the service detects a session change, with the new session
-   * index (integer) as its argument.
-   *
-   * @param {integer} sessionIndex Numeric index of the new session.
-   */
-  SESSION_CHANGE: 'sessionChange',
-  /**
-   * Emitted when the service state has changed, with the new state as its
-   * argument.
-   *
-   * @param {object} state The new service state.
-   */
-  STATE_CHANGE: 'stateChange'
-};
+import { EventEmitter } from '../eventEmitter.js';
+import { generateMessages } from '../messages/index.js';
+import { Events } from './events.js';
 
 /**
  * The base class for all timing service providers.
