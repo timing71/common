@@ -64,7 +64,20 @@ const Analyser = types.model({
           const leaderLap = self.session.leaderLap;
           const now = Date.now();
           const timeDelta = now - self.latestTimestamp;
-          const lapsPerSecond = (leaderLap - 1) / (timeElapsed - (timeDelta / 1000));
+
+          let lapsPerSecond = (leaderLap - 1) / (timeElapsed - (timeDelta / 1000));
+
+          if (!timeElapsed) {
+            const se = new StatExtractor(self.manifest.colSpec);
+            const leaderLastLap = se.get(self.state.cars[0], Stat.LAST_LAP);
+
+            if (Array.isArray(leaderLastLap)) {
+              lapsPerSecond = 1 / leaderLastLap[0];
+            }
+            else {
+              lapsPerSecond = 1 / leaderLastLap;
+            }
+          }
 
           if (lapsRemain) {
             return {
