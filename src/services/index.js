@@ -1,7 +1,9 @@
+import { T71 } from './t71.js';
+
 export * from './events.js';
 export * from './services.js';
 
-export const SERVICE_PROVIDERS = [];
+export const SERVICE_PROVIDERS = [T71];
 
 /**
  * Call with a {@link Service} class (not an instance) to add that service to the

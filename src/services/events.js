@@ -6,6 +6,14 @@
  */
 export const Events = {
   /**
+   * Emitted by the service when the complete analysis state should be reset
+   * to the contents of the message. (Mostly useful for T71 CLI services that
+   * send the analysis state when a client connects.)
+   *
+   * @param {object} data The analysis state.
+   */
+  ANALYSIS_STATE: 'analysisState',
+  /**
    * Emitted when the service manifest has changed, with the new manifest as its
    * argument.
    *
