@@ -2,6 +2,7 @@ import { T71 } from './t71.js';
 
 export * from './events.js';
 export * from './services.js';
+export * from './watchdog.js';
 
 export const SERVICE_PROVIDERS = [T71];
 
