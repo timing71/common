@@ -33,5 +33,20 @@ export const Events = {
    *
    * @param {object} state The new service state.
    */
-  STATE_CHANGE: 'stateChange'
+  STATE_CHANGE: 'stateChange',
+  /**
+   * Emitted by a service to communicate some information to the user. For
+   * example, a notification that connection to the upstream data source has
+   * succeeded or failed.
+   *
+   * @param {object} message A system message.
+   */
+  SYSTEM_MESSAGE: 'systemMessage'
+};
+
+export const Severity = {
+  DEBUG: 0,
+  INFO: 1,
+  WARNING: 2,
+  ERROR: 3
 };

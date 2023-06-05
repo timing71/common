@@ -2,7 +2,7 @@ import deepEqual from 'deep-equal';
 
 import { EventEmitter } from '../eventEmitter.js';
 import { generateMessages } from '../messages/index.js';
-import { Events } from './events.js';
+import { Events, Severity } from './events.js';
 
 /**
  * The base class for all timing service providers.
@@ -135,6 +135,34 @@ export class Service extends EventEmitter {
    */
   restoreTransientState(state) {
     // To optionally be implemented by subclasses
+  }
+
+  emitSystemMessage(severity, title, message, timeout = 5000) {
+    this.emit(
+      Events.SYSTEM_MESSAGE,
+      {
+        severity,
+        title,
+        message,
+        timeout
+      }
+    );
+  }
+
+  emitDebug(title, message, timeout) {
+    this.emitSystemMessage(Severity.DEBUG, title, message, timeout);
+  }
+
+  emitInfo(title, message, timeout) {
+    this.emitSystemMessage(Severity.INFO, title, message, timeout);
+  }
+
+  emitWarning(title, message, timeout) {
+    this.emitSystemMessage(Severity.WARNING, title, message, timeout);
+  }
+
+  emitError(title, message, timeout) {
+    this.emitSystemMessage(Severity.ERROR, title, message, timeout);
   }
 }
 
