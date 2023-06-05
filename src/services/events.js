@@ -41,7 +41,8 @@ export const Events = {
    *
    * @param {object} message A system message.
    */
-  SYSTEM_MESSAGE: 'systemMessage'
+  SYSTEM_MESSAGE: 'systemMessage',
+  RETRACT_SYSTEM_MESSAGE: 'retractSystemMessage'
 };
 
 export const Severity = {
