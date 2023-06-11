@@ -146,7 +146,12 @@ const Analyser = types.model({
   });
 
 export const createAnalyser = (initialState, live) => {
-  if (initialState === undefined || initialState === null || initialState?.version === CURRENT_VERSION) {
+  if (
+    initialState === undefined ||
+    initialState === null ||
+    initialState?.version === CURRENT_VERSION ||
+    Object.keys(initialState).length === 0
+  ) {
     const a = Analyser.create(initialState || undefined);
     a.setLive(live);
     return a;
