@@ -96,3 +96,14 @@ it('uses default category text if car class is an empty string', () => {
   expect(msgs.length).toEqual(1);
   expect(msgs[0][1]).toEqual('Timing');
 });
+
+it('does not create message if fastest lap is null', () => {
+  const colSpec = [Stat.NUM, Stat.CLASS, Stat.STATE, Stat.LAST_LAP, Stat.BEST_LAP];
+
+  const oldCars = [['1', '', 'RUN', [124.456, ''], [123.458, '']]];
+  const newCars = [['1', '', 'RUN', [null, 'pb'], [null, '']]];
+
+  const msgs = generateMessages({ colSpec }, { cars: oldCars }, { cars: newCars });
+
+  expect(msgs.length).toEqual(0);
+});

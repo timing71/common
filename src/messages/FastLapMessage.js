@@ -14,6 +14,7 @@ export const FastLapMessage = (se, oldCar, newCar) => {
     // const newBestLap = se.get(newCar, Stat.BEST_LAP);
     if (
       newLastLap && oldLastLap &&
+      newLastLap[0] &&
       newLastLap[1] === 'pb' &&
       (oldLastLap[1] !== 'pb' || oldLastLap[0] !== newLastLap[0]) &&
       !((oldLastLap[1] === 'sb' || oldLastLap[1] === 'sb-new') && newLastLap[1] === 'pb' && oldLastLap[0] === newLastLap[0])
@@ -26,7 +27,7 @@ export const FastLapMessage = (se, oldCar, newCar) => {
       );
     }
     else if (
-      newLastLap && oldLastLap &&
+      newLastLap && oldLastLap && newLastLap[0] &&
       (newLastLap[1] === 'sb' || newLastLap[1] === 'sb-new') &&
       (
         (oldLastLap[1] !== newLastLap[1] && oldLastLap[1] !== 'sb-new') ||
