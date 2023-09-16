@@ -3,6 +3,7 @@ import { StatExtractor } from '../statExtractor.js';
 import { DriverChangeMessage } from './DriverChangeMessage.js';
 import { FastLapMessage } from './FastLapMessage.js';
 import { FlagMessage } from './FlagMessage.js';
+import { FuelMessage } from './FuelMessage.js';
 import { PitMessage } from './PitMessage.js';
 import { StopResumeMessage } from './StopResumeMessage.js';
 
@@ -15,6 +16,7 @@ const GLOBAL_GENERATORS = [
 const PER_CAR_GENERATORS = [ // Order can be significant (e.g. driver change before pit out!)
   FastLapMessage,
   PitMessage,
+  FuelMessage,
   DriverChangeMessage,
   StopResumeMessage
 ];

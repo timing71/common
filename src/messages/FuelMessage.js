@@ -1,7 +1,8 @@
 import { Stat } from '../racing.js';
 import { Message } from './Message.js';
 
-export const PitMessage = (se, oldCar, newCar) => {
+export const FuelMessage = (se, oldCar, newCar) => {
+  // Creventic have a separate fuelling area than the pit lane
   const oldState = se.get(oldCar, Stat.STATE);
   const newState = se.get(newCar, Stat.STATE);
   const carNum = se.get(newCar, Stat.NUM);
@@ -12,11 +13,8 @@ export const PitMessage = (se, oldCar, newCar) => {
 
     const driverText = driver ? ` (${driver})` : '';
 
-    if ((oldState !== 'RUN' && oldState !== 'STOP' && newState === 'OUT') || ((oldState === 'PIT' || oldState === 'FUEL') && newState === 'RUN')) {
-      return new Message(clazz, `#${carNum}${driverText} has left the pits`, 'out', carNum);
-    }
-    else if (newState === 'PIT') {
-      return new Message(clazz, `#${carNum}${driverText} has entered the pits`, 'pit', carNum);
+    if (newState === 'FUEL') {
+      return new Message(clazz, `#${carNum}${driverText} has entered the fuelling area`, 'pit', carNum);
     }
   }
 };
