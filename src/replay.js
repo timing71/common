@@ -71,31 +71,35 @@ export class Replay {
   async getStateAt(time) {
     const closestKeyframe = Math.max(...Object.keys(this._keyframes).filter(k => (parseInt(k, 10) <= time)));
 
-    const keyframeState = await this.readEntry(this._keyframes[closestKeyframe]);
+    if (this._keyframes[closestKeyframe]) {
+      const keyframeState = await this.readEntry(this._keyframes[closestKeyframe]);
 
-    const iframes = Object.keys(this._iframes).filter(
-      i => {
-        const iVal = parseInt(i, 10);
-        return iVal > closestKeyframe && iVal <= time;
+      const iframes = Object.keys(this._iframes).filter(
+        i => {
+          const iVal = parseInt(i, 10);
+          return iVal > closestKeyframe && iVal <= time;
+        }
+      );
+
+      let myState = { ...keyframeState };
+
+      for (let i = 0; i < iframes.length; i++) {
+        const ifrState = await this.readEntry(this._iframes[iframes[i]]);
+        myState = await applyIframe(myState, ifrState);
       }
-    );
 
-    let myState = { ...keyframeState };
+      if (!myState.manifest) {
+        myState.manifest = this.manifest;
+      }
 
-    for (let i = 0; i < iframes.length; i++) {
-      const ifrState = await this.readEntry(this._iframes[iframes[i]]);
-      myState = await applyIframe(myState, ifrState);
+      if (!myState.lastUpdated) {
+        myState.lastUpdated = time;
+      }
+
+      return myState;
     }
 
-    if (!myState.manifest) {
-      myState.manifest = this.manifest;
-    }
-
-    if (!myState.lastUpdated) {
-      myState.lastUpdated = time;
-    }
-
-    return myState;
+    return {};
   }
 
   async getStateAtRelative(relTime) {
