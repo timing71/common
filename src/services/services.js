@@ -32,6 +32,7 @@ export class Service extends EventEmitter {
     this.restoreTransientState = this.restoreTransientState.bind(this);
 
     this._prevState = initialState;
+    this.parameters = {};
   }
 
   onSessionChange() {
