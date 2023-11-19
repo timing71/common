@@ -1,4 +1,4 @@
-import { generateMessages } from '..';
+import { generateMessages } from '../index.js';
 import { Stat } from '../../racing.js';
 
 it('generates car message on change to STOP', () => {

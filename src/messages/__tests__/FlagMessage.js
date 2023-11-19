@@ -1,4 +1,4 @@
-import { generateMessages } from '..';
+import { generateMessages } from '../index.js';
 import { FlagState } from '@timing71/common';
 
 const FLAG_EXPECTATIONS = [

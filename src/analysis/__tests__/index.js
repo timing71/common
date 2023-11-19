@@ -1,4 +1,4 @@
-import { createAnalyser } from '..';
+import { createAnalyser } from '../index.js';
 import { CURRENT_VERSION } from '../migrate.js';
 
 import LM24 from './2021_lm24.json';
