@@ -356,6 +356,11 @@ export const Car = types.model({
 
     get classColorString() {
       return (self.raceClass || '').toLowerCase().replace(/[-/ ]/, '');
+    },
+
+    get bestLap() {
+      const allBest = self.stints.map(s => s.bestLap);
+      return Math.max(...allBest.filter(l => !!l));
     }
   })
 );
