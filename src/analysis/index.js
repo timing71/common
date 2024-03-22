@@ -60,6 +60,10 @@ const Analyser = types.model({
       },
       views: {
         get distancePrediction() {
+          if (!self.state.cars[0]) {
+            // We can't make a prediction if there are no cars!
+            return null;
+          }
           const { timeElapsed, timeRemain, lapsRemain } = self.state.session;
           const leaderLap = self.session.leaderLap;
           const now = Date.now();
