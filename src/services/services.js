@@ -38,7 +38,8 @@ export class Service extends EventEmitter {
   onSessionChange() {
     this.service = {
       ...this.service,
-      currentSessionIndex: (this.service.currentSessionIndex || 0) + 1
+      currentSessionIndex: (this.service.currentSessionIndex || 0) + 1,
+      startTime: Date.now()
     };
     this.emit(Events.SESSION_CHANGE, this.service.currentSessionIndex);
   }
