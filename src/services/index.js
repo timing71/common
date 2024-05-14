@@ -1,10 +1,11 @@
+import { RaceMonitor } from './rmonitor/index.js';
 import { T71 } from './t71.js';
 
 export * from './events.js';
 export * from './services.js';
 export * from './watchdog.js';
 
-export const SERVICE_PROVIDERS = [T71];
+export const SERVICE_PROVIDERS = [RaceMonitor, T71];
 
 /**
  * Call with a {@link Service} class (not an instance) to add that service to the
