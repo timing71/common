@@ -120,12 +120,16 @@ export class RMonitorClient extends EventEmitter {
         ...this.state.competitors[regNumber] || {},
         lastSeen: timestamp
       };
+    },
+    // Race Monitor: sort method
+    'RMS': (sortMethod) => {
+      this.state.settings.sortMethod = sortMethod;
     }
   };
 
   handleMessages(messages) {
-    messages.split('\r\n').forEach(
-      this.handleMessage
+    messages.split('\n').forEach(
+      (msg) => this.handleMessage(msg.trim())
     );
     return this.state;
   }
