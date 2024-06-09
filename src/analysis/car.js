@@ -221,7 +221,7 @@ export const Car = types.model({
         currentDriver = Driver.create({
           idx: self.drivers.length,
           car: self,
-          name: currentDriverName
+          name: Array.isArray(currentDriverName) ? currentDriverName[0] : currentDriverName
         });
         self.drivers.push(currentDriver);
       }
