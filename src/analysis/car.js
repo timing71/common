@@ -8,7 +8,13 @@ const Driver = types.model({
   car: types.reference(types.late(() => Car)),
   name: types.string,
   ranking: types.union(types.string, types.undefined)
-}).views(
+}).actions(
+  self => ({
+    updateRanking(newRanking) {
+      self.ranking = newRanking;
+    }
+  })
+).views(
   self => ({
     get stints() {
       return self.car.stints.filter(s => s.driver === self);
@@ -216,7 +222,8 @@ export const Car = types.model({
     },
 
     update(oldStatExtractor, oldCar, statExtractor, car, currentFlag, timestamp, startTime) {
-      const currentDriverName = statExtractor.get(car, Stat.DRIVER);
+      const currentDriverValue = statExtractor.get(car, Stat.DRIVER);
+      const currentDriverName = Array.isArray(currentDriverValue) ? currentDriverValue[0] : currentDriverValue;
       let currentDriver = self.drivers.find(d => d.name === currentDriverName);
       if (!!currentDriverName && !currentDriver) {
         currentDriver = Driver.create({
@@ -226,6 +233,10 @@ export const Car = types.model({
           ranking: Array.isArray(currentDriverName) ? currentDriverName[1] : undefined
         });
         self.drivers.push(currentDriver);
+      }
+      if (currentDriver && Array.isArray(currentDriverValue) && currentDriver.ranking !== currentDriverValue[1]) {
+        // Ranking might not be immediately available in first frame seen
+        currentDriver.updateRanking(currentDriverValue[1]);
       }
 
       // We assume these things don't change mid-session!
