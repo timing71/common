@@ -6,7 +6,8 @@ const sum = (total, v) => total + v;
 const Driver = types.model({
   idx: types.identifierNumber,
   car: types.reference(types.late(() => Car)),
-  name: types.string
+  name: types.string,
+  ranking: types.union(types.string, types.undefined)
 }).views(
   self => ({
     get stints() {
@@ -221,7 +222,8 @@ export const Car = types.model({
         currentDriver = Driver.create({
           idx: self.drivers.length,
           car: self,
-          name: Array.isArray(currentDriverName) ? currentDriverName[0] : currentDriverName
+          name: Array.isArray(currentDriverName) ? currentDriverName[0] : currentDriverName,
+          ranking: Array.isArray(currentDriverName) ? currentDriverName[1] : undefined
         });
         self.drivers.push(currentDriver);
       }
