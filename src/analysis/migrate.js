@@ -134,6 +134,15 @@ const MIGRATIONS = {
     }
 
     return migrated;
+  },
+  3: (oldState) => {
+    const migrated = {
+      ...oldState,
+      trackData: {},
+      version: 4
+    };
+
+    return migrated;
   }
 };
 

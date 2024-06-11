@@ -8,6 +8,7 @@ import { Manifest } from './manifest.js';
 import { Messages } from './messages.js';
 import { Session } from './session.js';
 import { State } from './state.js';
+import { TrackData } from './trackData.js';
 
 import { CURRENT_VERSION, migrateAnalysisState } from './migrate.js';
 
@@ -19,6 +20,7 @@ const Analyser = types.model({
   session: types.optional(Session, () => Session.create()),
   state: types.optional(State, () => State.create()),
   manifest: types.optional(Manifest, () => Manifest.create()),
+  trackData: types.optional(TrackData, () => TrackData.create()),
   latestTimestamp: types.optional(types.Date, () => new Date()),
   version: types.optional(types.literal(CURRENT_VERSION), CURRENT_VERSION)
 }).extend(
@@ -34,6 +36,7 @@ const Analyser = types.model({
             self.session.update(oldState, newState);
 
             self.state.update(oldState, newState);
+            self.trackData.update(oldState, newState);
             self.manifest = newState.manifest;
 
             self.latestTimestamp = timestamp || new Date();
