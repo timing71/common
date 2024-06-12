@@ -12,4 +12,15 @@ describe('StatExtractor', () => {
     expect(se.getDriverName([42, ['Eve Hewitt', null]])).toEqual('Eve Hewitt');
     expect(se.getDriverName([42, null])).toEqual(null);
   });
+
+  it('extracts driver rankings when present', () => {
+    const colspec = [Stat.NUM, Stat.DRIVER];
+
+    const se = new StatExtractor(colspec);
+
+    expect(se.getDriverRanking([42, 'Eve Hewitt'])).toEqual(null);
+    expect(se.getDriverRanking([42, ['Eve Hewitt', 'platinum']])).toEqual('platinum');
+    expect(se.getDriverRanking([42, ['Eve Hewitt', null]])).toEqual(null);
+    expect(se.getDriverRanking([42, null])).toEqual(null);
+  });
 });

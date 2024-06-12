@@ -222,21 +222,21 @@ export const Car = types.model({
     },
 
     update(oldStatExtractor, oldCar, statExtractor, car, currentFlag, timestamp, startTime) {
-      const currentDriverValue = statExtractor.get(car, Stat.DRIVER);
-      const currentDriverName = Array.isArray(currentDriverValue) ? currentDriverValue[0] : currentDriverValue;
+      const currentDriverName = statExtractor.getDriverName(car);
+      const currentDriverRanking = statExtractor.getDriverRanking(car) || undefined;
       let currentDriver = self.drivers.find(d => d.name === currentDriverName);
       if (!!currentDriverName && !currentDriver) {
         currentDriver = Driver.create({
           idx: self.drivers.length,
           car: self,
-          name: Array.isArray(currentDriverName) ? currentDriverName[0] : currentDriverName,
-          ranking: Array.isArray(currentDriverName) ? currentDriverName[1] : undefined
+          name: currentDriverName,
+          ranking: currentDriverRanking
         });
         self.drivers.push(currentDriver);
       }
-      if (currentDriver && Array.isArray(currentDriverValue) && currentDriver.ranking !== currentDriverValue[1]) {
+      if (currentDriver && currentDriverRanking && currentDriver.ranking !== currentDriverRanking) {
         // Ranking might not be immediately available in first frame seen
-        currentDriver.updateRanking(currentDriverValue[1]);
+        currentDriver.updateRanking(currentDriverRanking);
       }
 
       // We assume these things don't change mid-session!

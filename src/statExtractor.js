@@ -43,6 +43,14 @@ export class StatExtractor {
     return Array.isArray(driver) ? driver[0] : driver;
   }
 
+  getDriverRanking(car) {
+    const driver = this.get(car, Stat.DRIVER);
+    if (!driver) {
+      return null;
+    }
+    return Array.isArray(driver) ? driver[1] : null;
+  }
+
   /**
    * Uses some unnecessarily complex logic to identify and retrieve a given
    * car from a list of cars.
