@@ -7,7 +7,7 @@ export const StopResumeMessage = (se, oldCar, newCar) => {
   const carNum = se.get(newCar, Stat.NUM);
 
   if (oldState !== newState && !!carNum) {
-    const driver = se.get(newCar, Stat.DRIVER);
+    const driver = se.getDriverName(newCar);
     const clazz = se.get(newCar, Stat.CLASS, 'Pits');
 
     const driverText = driver ? ` (${driver})` : '';

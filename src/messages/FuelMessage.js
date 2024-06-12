@@ -8,7 +8,7 @@ export const FuelMessage = (se, oldCar, newCar) => {
   const carNum = se.get(newCar, Stat.NUM);
 
   if (oldState !== newState && !!carNum && oldState !== 'N/S') {
-    const driver = se.get(newCar, Stat.DRIVER);
+    const driver = se.getDriverName(newCar);
     const clazz = se.get(newCar, Stat.CLASS, 'Pits');
 
     const driverText = driver ? ` (${driver})` : '';

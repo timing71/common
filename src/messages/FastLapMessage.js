@@ -9,7 +9,7 @@ export const FastLapMessage = (se, oldCar, newCar) => {
   const clazz = se.get(newCar, Stat.CLASS, 'Timing');
 
   if (oldLastLap !== newLastLap) {
-    const driver = se.get(newCar, Stat.DRIVER);
+    const driver = se.getDriverName(newCar);
     const driverText = driver ? ` (${driver})` : '';
     // const newBestLap = se.get(newCar, Stat.BEST_LAP);
     if (

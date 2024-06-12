@@ -2,24 +2,21 @@ import { Stat } from '../racing.js';
 import { Message } from './Message.js';
 
 export const DriverChangeMessage = (se, oldCar, newCar) => {
-  const oldDriver = se.get(oldCar, Stat.DRIVER);
-  const newDriver = se.get(newCar, Stat.DRIVER);
+  const oldDriver = se.getDriverName(oldCar);
+  const newDriver = se.getDriverName(newCar);
   const carNum = se.get(newCar, Stat.NUM);
   const clazz = se.get(newCar, Stat.CLASS, 'Pits');
 
-  const oldDriverName = Array.isArray(oldDriver) ? oldDriver[0] : oldDriver;
-  const newDriverName = Array.isArray(newDriver) ? newDriver[0] : newDriver;
-
-  if (!!carNum && oldDriverName !== newDriverName) {
+  if (!!carNum && oldDriver !== newDriver) {
     let message = '';
     if (!oldDriver) {
-      message = `#${carNum} Driver change (to ${newDriverName})`;
+      message = `#${carNum} Driver change (to ${newDriver})`;
     }
     else if (!newDriver) {
-      message = `#${carNum} Driver change (${oldDriverName} to nobody)`;
+      message = `#${carNum} Driver change (${oldDriver} to nobody)`;
     }
     else {
-      message = `#${carNum} Driver change (${oldDriverName} to ${newDriverName})`;
+      message = `#${carNum} Driver change (${oldDriver} to ${newDriver})`;
     }
 
     return new Message(
