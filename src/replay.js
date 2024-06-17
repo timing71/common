@@ -106,6 +106,15 @@ export class Replay {
     return await this.getStateAt(this.manifest.startTime + relTime);
   }
 
+  /**
+   * Pass a function that will be called once for each frame in this recording,
+   * in order.
+   *
+   * The returned timestamp is a Unix-style timestamp (without milliseconds).
+   *
+   * @param {function} callback Function that will get called with arguments
+   *                   `(state, timestamp)` for each frame in the recording.
+   */
   async forEachFrame(callback) {
     const keyframes = Object.keys(this._keyframes).map(k => parseInt(k, 10)).sort();
     const iframes = Object.keys(this._iframes).map(k => parseInt(k, 10)).sort();
@@ -132,7 +141,9 @@ export class Replay {
         const i = iframes.shift();
         const ifr = await this.readEntry(this._iframes[i]);
         prevFrame = await applyIframe(prevFrame, ifr);
-        prevFrame.lastUpdated = i;
+        // Internal lastUpdated is a JS timestamp (with milliseconds)
+        prevFrame.lastUpdated = i * 1000;
+        // Callback gets a Unix timestamp (no milliseconds)
         callback(prevFrame, i);
       }
     }
