@@ -64,7 +64,7 @@ export const TrackData = types.model({
             }
           }
 
-          if (!prevValue || prevValue[0] !== value[0]) {
+          if (value[0] && (!prevValue || prevValue[0] !== value[0])) {
             // Value has changed! How exciting
             // console.log(label, prevValue[0], '==>', value[0]);
             self.series.get(label).data.push(Datum.create({
