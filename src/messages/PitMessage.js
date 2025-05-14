@@ -1,6 +1,8 @@
-import { timeInSeconds } from '../formats.js';
+import dayjs from '../dates.js';
 import { Stat } from '../racing.js';
 import { Message } from './Message.js';
+
+const roundToSecond = (ts) => Math.round(ts / 1000) * 1000;
 
 export const PitMessage = (se, oldCar, newCar, cache) => {
   const oldState = se.get(oldCar, Stat.STATE);
@@ -41,14 +43,14 @@ export const PitMessage = (se, oldCar, newCar, cache) => {
       const { lastFuelIn, lastFuelOut, lastPitIn, lastPitOut } = cache['PitMessage'][carNum];
       let pitTimeMsg = '';
       if (Number.isInteger(lastPitIn) && Number.isInteger(lastPitOut)) {
-        const pitTime = lastPitOut - lastPitIn;
+        const pitTime = roundToSecond(lastPitOut) - roundToSecond(lastPitIn);
 
-        const fuelTime = (lastFuelOut || 0) - (lastFuelIn || 0);
+        const fuelTime = roundToSecond(lastFuelOut || 0) - roundToSecond(lastFuelIn || 0);
         if (fuelTime > 0) {
-          pitTimeMsg = `(total pit time: ${timeInSeconds(pitTime + fuelTime, 0)}, ${timeInSeconds(fuelTime, 0)} fuel)`;
+          pitTimeMsg = `(total pit time: ${dayjs.duration(pitTime + fuelTime).format('m:ss')}, ${dayjs.duration(fuelTime).format('m:ss')} fuel)`;
         }
         else {
-          pitTimeMsg = `(pit time: ${timeInSeconds(pitTime, 0)})`;
+          pitTimeMsg = `(pit time: ${dayjs.duration(pitTime).format('m:ss')})`;
         }
 
         delete cache['PitMessage'][carNum];
