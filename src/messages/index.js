@@ -24,7 +24,7 @@ const PER_CAR_GENERATORS = [ // Order can be significant (e.g. driver change bef
 export class MessageGenerator {
   constructor(opts = {}) {
     const { global = [], perCar = [] } = opts;
-    this._state = {};
+    this._cache = {};
     this._global = [...GLOBAL_GENERATORS, ...global];
     this._perCar = [...PER_CAR_GENERATORS, ...perCar];
 
@@ -35,9 +35,12 @@ export class MessageGenerator {
     if (!newState || !oldState) {
       return [];
     }
+
+    this._cache.lastUpdated = newState.lastUpdated;
+
     const globalMessages = this._global.flatMap(
       generator => {
-        const maybeMessages = generator(manifest, oldState, newState, this._state);
+        const maybeMessages = generator(manifest, oldState, newState, this._cache);
         if (Array.isArray(maybeMessages)) {
           return maybeMessages.map(m => m.toCTDFormat());
         }
@@ -58,7 +61,7 @@ export class MessageGenerator {
           if (oldCar) {
             this._perCar.forEach(
               generator => {
-                const possibleMessage = generator(se, oldCar, newCar, this._state);
+                const possibleMessage = generator(se, oldCar, newCar, this._cache);
                 if (possibleMessage) {
                   perCarMessages.push(possibleMessage.toCTDFormat());
                 }

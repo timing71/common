@@ -1,9 +1,9 @@
 import { MessageGenerator } from '../index.js';
 import { Stat } from '../../racing.js';
 
-it('generates car message on pit in', () => {
-  const colSpec = [Stat.NUM, Stat.STATE, Stat.CLASS, Stat.DRIVER];
+const colSpec = [Stat.NUM, Stat.STATE, Stat.CLASS, Stat.DRIVER];
 
+it('generates car message on pit in', () => {
   const oldCars = [['1', 'RUN', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
   const newCars = [['1', 'PIT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
 
@@ -14,8 +14,6 @@ it('generates car message on pit in', () => {
 });
 
 it('generates car message on pit out', () => {
-  const colSpec = [Stat.NUM, Stat.STATE, Stat.CLASS, Stat.DRIVER];
-
   const oldCars = [['1', 'PIT', 'LMP1', 'John Hindhaugh'], ['2', 'PIT', 'LMP1', 'Eve Hewitt'], ['3', 'FUEL', 'LMP2', 'Joe Bradley']];
   const newCars = [['1', 'OUT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt'], ['3', 'RUN', 'LMP2', 'Joe Bradley']];
 
@@ -28,8 +26,6 @@ it('generates car message on pit out', () => {
 });
 
 it('handles driver rankings being specified', () => {
-  const colSpec = [Stat.NUM, Stat.STATE, Stat.CLASS, Stat.DRIVER];
-
   const oldCars = [['1', 'RUN', 'LMP1', ['John Hindhaugh', 'bronze']], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
   const newCars = [['1', 'PIT', 'LMP1', ['John Hindhaugh', 'bronze']], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
 
@@ -37,4 +33,50 @@ it('handles driver rankings being specified', () => {
 
   expect(msgs.length).toEqual(1);
   expect(msgs[0][2]).toEqual('#1 (John Hindhaugh) has entered the pits');
+});
+
+it('calculates a total pit time if both pit-in and pit-out have been seen', () => {
+  const oldCars = [['1', 'RUN', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+  const pitInCars = [['1', 'PIT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+  const pitOutCars = [['1', 'OUT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+
+  const generator = new MessageGenerator();
+
+  generator.generate({ colSpec }, { cars: oldCars, lastUpdated: 0 }, { cars: pitInCars, lastUpdated: 0 });
+  const outMsgs = generator.generate({ colSpec }, { cars: pitInCars, lastUpdated: 0 }, { cars: pitOutCars, lastUpdated: 123 });
+
+  expect(outMsgs.length).toEqual(1);
+  expect(outMsgs[0][2]).toEqual('#1 (John Hindhaugh) has left the pits (pit time: 2:03)');
+});
+
+it('calculates a total pit time if both pit-in and pit-out have been seen and car goes out via fuelling area', () => {
+  const oldCars = [['1', 'RUN', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+  const pitInCars = [['1', 'PIT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+  const pitFuelCars = [['1', 'FUEL', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+  const pitOutCars = [['1', 'OUT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+
+  const generator = new MessageGenerator();
+
+  generator.generate({ colSpec }, { cars: oldCars, lastUpdated: 0 }, { cars: pitInCars, lastUpdated: 0 });
+  generator.generate({ colSpec }, { cars: pitInCars, lastUpdated: 0 }, { cars: pitFuelCars, lastUpdated: 62 });
+  const outMsgs = generator.generate({ colSpec }, { cars: pitInCars, lastUpdated: 0 }, { cars: pitOutCars, lastUpdated: 123 });
+
+  expect(outMsgs.length).toEqual(1);
+  expect(outMsgs[0][2]).toEqual('#1 (John Hindhaugh) has left the pits (pit time: 2:03)');
+});
+
+it('calculates a total pit time if both pit-in and pit-out have been seen and car comes in via fuelling area', () => {
+  const oldCars = [['1', 'RUN', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+  const pitInCars = [['1', 'PIT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+  const pitFuelCars = [['1', 'FUEL', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+  const pitOutCars = [['1', 'OUT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
+
+  const generator = new MessageGenerator();
+
+  generator.generate({ colSpec }, { cars: oldCars, lastUpdated: 0 }, { cars: pitFuelCars, lastUpdated: 0 });
+  generator.generate({ colSpec }, { cars: pitFuelCars, lastUpdated: 0 }, { cars: pitInCars, lastUpdated: 62 });
+  const outMsgs = generator.generate({ colSpec }, { cars: pitInCars, lastUpdated: 0 }, { cars: pitOutCars, lastUpdated: 123 });
+
+  expect(outMsgs.length).toEqual(1);
+  expect(outMsgs[0][2]).toEqual('#1 (John Hindhaugh) has left the pits (pit time: 2:03)');
 });
