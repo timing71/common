@@ -21,24 +21,42 @@ export const PitMessage = (se, oldCar, newCar, cache) => {
 
     const driverText = driver ? ` (${driver})` : '';
 
+    if (oldState !== 'FUEL' && newState === 'FUEL') {
+      cache['PitMessage'][carNum].lastFuelIn = cache.lastUpdated;
+    }
+
+    if (oldState === 'FUEL' && newState !== 'FUEL') {
+      cache['PitMessage'][carNum].lastFuelOut = cache.lastUpdated;
+    }
+
+    if (oldState !== 'PIT' && newState === 'PIT') {
+      cache['PitMessage'][carNum].lastPitIn = cache.lastUpdated;
+    }
+
+    if (oldState === 'PIT' && newState !== 'PIT') {
+      cache['PitMessage'][carNum].lastPitOut = cache.lastUpdated;
+    }
+
     if ((oldState !== 'RUN' && oldState !== 'STOP' && newState === 'OUT') || ((oldState === 'PIT' || oldState === 'FUEL') && newState === 'RUN')) {
-      const lastPitIn = cache['PitMessage'][carNum].lastPitIn;
+      const { lastFuelIn, lastFuelOut, lastPitIn, lastPitOut } = cache['PitMessage'][carNum];
       let pitTimeMsg = '';
-      if (Number.isInteger(lastPitIn)) {
-        const pitTime = cache.lastUpdated - lastPitIn;
-        pitTimeMsg = `(pit time: ${timeInSeconds(pitTime, 0)})`;
-        delete cache['PitMessage'][carNum].lastPitIn;
+      if (Number.isInteger(lastPitIn) && Number.isInteger(lastPitOut)) {
+        const pitTime = lastPitOut - lastPitIn;
+
+        const fuelTime = (lastFuelOut || 0) - (lastFuelIn || 0);
+        if (fuelTime > 0) {
+          pitTimeMsg = `(total pit time: ${timeInSeconds(pitTime + fuelTime, 0)}, ${timeInSeconds(fuelTime, 0)} fuel)`;
+        }
+        else {
+          pitTimeMsg = `(pit time: ${timeInSeconds(pitTime, 0)})`;
+        }
+
+        delete cache['PitMessage'][carNum];
       }
       return new Message(clazz, `#${carNum}${driverText} has left the pits ${pitTimeMsg}`.trim(), 'out', carNum);
     }
     else if (newState === 'PIT') {
-      if (oldState !== 'FUEL') {
-        cache['PitMessage'][carNum].lastPitIn = cache.lastUpdated;
-      }
       return new Message(clazz, `#${carNum}${driverText} has entered the pits`, 'pit', carNum);
-    }
-    else if (newState === 'FUEL' && oldState !== 'PIT') {
-      cache['PitMessage'][carNum].lastPitIn = cache.lastUpdated;
     }
   }
 };

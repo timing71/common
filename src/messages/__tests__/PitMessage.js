@@ -65,7 +65,7 @@ it('calculates a total pit time if both pit-in and pit-out have been seen and ca
   expect(outMsgs[0][2]).toEqual('#1 (John Hindhaugh) has left the pits (pit time: 2:03)');
 });
 
-it('calculates a total pit time if both pit-in and pit-out have been seen and car comes in via fuelling area', () => {
+it('calculates total pit time and fuel time if both pit-in and pit-out have been seen and car comes in via fuelling area', () => {
   const oldCars = [['1', 'RUN', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
   const pitInCars = [['1', 'PIT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
   const pitFuelCars = [['1', 'FUEL', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
@@ -78,5 +78,5 @@ it('calculates a total pit time if both pit-in and pit-out have been seen and ca
   const outMsgs = generator.generate({ colSpec }, { cars: pitInCars, lastUpdated: 0 }, { cars: pitOutCars, lastUpdated: 123 });
 
   expect(outMsgs.length).toEqual(1);
-  expect(outMsgs[0][2]).toEqual('#1 (John Hindhaugh) has left the pits (pit time: 2:03)');
+  expect(outMsgs[0][2]).toEqual('#1 (John Hindhaugh) has left the pits (total pit time: 2:03, 1:02 fuel)');
 });
