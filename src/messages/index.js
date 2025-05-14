@@ -21,43 +21,54 @@ const PER_CAR_GENERATORS = [ // Order can be significant (e.g. driver change bef
   StopResumeMessage
 ];
 
-export const generateMessages = (manifest, oldState, newState) => {
-  if (!newState || !oldState) {
-    return [];
+export class MessageGenerator {
+  constructor(opts = {}) {
+    const { global = [], perCar = [] } = opts;
+    this._state = {};
+    this._global = [...GLOBAL_GENERATORS, ...global];
+    this._perCar = [...PER_CAR_GENERATORS, ...perCar];
+
+    this.generate = this.generate.bind(this);
   }
-  const globalMessages = GLOBAL_GENERATORS.flatMap(
-    mg => {
-      const maybeMessages = mg(manifest, oldState, newState);
-      if (Array.isArray(maybeMessages)) {
-        return maybeMessages.map(m => m.toCTDFormat());
-      }
-      else if (maybeMessages?.toCTDFormat) {
-        return [maybeMessages.toCTDFormat()];
-      }
+
+  generate(manifest, oldState, newState) {
+    if (!newState || !oldState) {
       return [];
     }
-  );
-
-  const perCarMessages = [];
-
-  if (manifest?.colSpec?.find(s => s[0] === Stat.NUM[0])) { // Can't use includes() any more FSR...
-    const se = new StatExtractor(manifest.colSpec);
-    (newState.cars || []).forEach(
-      newCar => {
-        const oldCar = se.findCarInList(newCar, oldState.cars);
-        if (oldCar) {
-          PER_CAR_GENERATORS.forEach(
-            generator => {
-              const possibleMessage = generator(se, oldCar, newCar);
-              if (possibleMessage) {
-                perCarMessages.push(possibleMessage.toCTDFormat());
-              }
-            }
-          );
+    const globalMessages = this._global.flatMap(
+      generator => {
+        const maybeMessages = generator(manifest, oldState, newState, this._state);
+        if (Array.isArray(maybeMessages)) {
+          return maybeMessages.map(m => m.toCTDFormat());
         }
+        else if (maybeMessages?.toCTDFormat) {
+          return [maybeMessages.toCTDFormat()];
+        }
+        return [];
       }
     );
-  }
 
-  return globalMessages.concat(perCarMessages);
-};
+    const perCarMessages = [];
+
+    if (manifest?.colSpec?.find(s => s[0] === Stat.NUM[0])) { // Can't use includes() any more FSR...
+      const se = new StatExtractor(manifest.colSpec);
+      (newState.cars || []).forEach(
+        newCar => {
+          const oldCar = se.findCarInList(newCar, oldState.cars);
+          if (oldCar) {
+            this._perCar.forEach(
+              generator => {
+                const possibleMessage = generator(se, oldCar, newCar, this._state);
+                if (possibleMessage) {
+                  perCarMessages.push(possibleMessage.toCTDFormat());
+                }
+              }
+            );
+          }
+        }
+      );
+    }
+
+    return globalMessages.concat(perCarMessages);
+  }
+}

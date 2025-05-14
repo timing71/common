@@ -1,4 +1,4 @@
-import { generateMessages } from '../index.js';
+import { MessageGenerator } from '../index.js';
 import { Stat } from '../../racing.js';
 
 it('generates car message on entering fuel area', () => {
@@ -7,7 +7,7 @@ it('generates car message on entering fuel area', () => {
   const oldCars = [['1', 'RUN', 'LMP1', 'John Hindhaugh'], ['2', 'PIT', 'LMP1', 'Eve Hewitt'], ['3', 'RUN', 'LMP2', 'Joe Bradley']];
   const newCars = [['1', 'FUEL', 'LMP1', 'John Hindhaugh'], ['2', 'FUEL', 'LMP1', 'Eve Hewitt'], ['3', 'RUN', 'LMP2', 'Joe Bradley']];
 
-  const msgs = generateMessages({ colSpec }, { cars: oldCars }, { cars: newCars });
+  const msgs = new MessageGenerator().generate({ colSpec }, { cars: oldCars }, { cars: newCars });
 
   expect(msgs.length).toEqual(2);
   expect(msgs[0][2]).toEqual('#1 (John Hindhaugh) has entered the fuelling area');
@@ -20,7 +20,7 @@ it('generates pit-exit messages on leaving fuel area', () => {
   const oldCars = [['1', 'FUEL', 'LMP1', 'John Hindhaugh'], ['2', 'FUEL', 'LMP1', 'Eve Hewitt']];
   const newCars = [['1', 'OUT', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
 
-  const msgs = generateMessages({ colSpec }, { cars: oldCars }, { cars: newCars });
+  const msgs = new MessageGenerator().generate({ colSpec }, { cars: oldCars }, { cars: newCars });
 
   expect(msgs.length).toEqual(2);
   expect(msgs[0][2]).toEqual('#1 (John Hindhaugh) has left the pits');

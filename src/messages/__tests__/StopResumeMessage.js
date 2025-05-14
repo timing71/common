@@ -1,4 +1,4 @@
-import { generateMessages } from '../index.js';
+import { MessageGenerator } from '../index.js';
 import { Stat } from '../../racing.js';
 
 it('generates car message on change to STOP', () => {
@@ -7,7 +7,7 @@ it('generates car message on change to STOP', () => {
   const oldCars = [['1', 'RUN', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
   const newCars = [['1', 'STOP', 'LMP1', 'John Hindhaugh'], ['2', 'RUN', 'LMP1', 'Eve Hewitt']];
 
-  const msgs = generateMessages({ colSpec }, { cars: oldCars }, { cars: newCars });
+  const msgs = new MessageGenerator().generate({ colSpec }, { cars: oldCars }, { cars: newCars });
 
   expect(msgs.length).toEqual(1);
   expect(msgs[0][2]).toEqual('#1 (John Hindhaugh) is running slowly or stopped');
@@ -19,7 +19,7 @@ it('generates car message on change from STOP', () => {
   const oldCars = [['1', 'STOP', 'LMP1', 'John Hindhaugh'], ['2', 'STOP', 'LMP1', 'Eve Hewitt']];
   const newCars = [['1', 'RUN', 'LMP1', 'John Hindhaugh'], ['2', 'OUT', 'LMP1', 'Eve Hewitt']];
 
-  const msgs = generateMessages({ colSpec }, { cars: oldCars }, { cars: newCars });
+  const msgs = new MessageGenerator().generate({ colSpec }, { cars: oldCars }, { cars: newCars });
 
   expect(msgs.length).toEqual(2);
   expect(msgs[0][2]).toEqual('#1 (John Hindhaugh) has resumed');

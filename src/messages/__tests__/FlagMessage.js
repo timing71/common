@@ -1,4 +1,4 @@
-import { generateMessages } from '../index.js';
+import { MessageGenerator } from '../index.js';
 import { FlagState } from '@timing71/common';
 
 const FLAG_EXPECTATIONS = [
@@ -15,7 +15,7 @@ FLAG_EXPECTATIONS.forEach(
     it(
       `generates flag message from ${from} to ${to}`,
       () => {
-        const msgs = generateMessages(
+        const msgs = new MessageGenerator().generate(
           {},
           { session: { flagState: from } },
           { session: { flagState: to } }

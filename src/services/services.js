@@ -1,7 +1,7 @@
 import deepEqual from 'deep-equal';
 
 import { EventEmitter } from '../eventEmitter.js';
-import { generateMessages } from '../messages/index.js';
+import { MessageGenerator } from '../messages/index.js';
 import { Events, Severity } from './events.js';
 
 /**
@@ -21,6 +21,8 @@ export class Service extends EventEmitter {
   constructor(service, initialState = {}) {
     super();
     this.service = service;
+
+    this._messageGenerator = new MessageGenerator();
 
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
@@ -47,7 +49,7 @@ export class Service extends EventEmitter {
   onStateChange(updatedState) {
     const newState = { ...this._prevState, ...updatedState };
 
-    const newMessages = generateMessages(newState.manifest, this._prevState, newState).concat(
+    const newMessages = this._messageGenerator.generate(newState.manifest, this._prevState, newState).concat(
       updatedState.extraMessages || []
     );
 
