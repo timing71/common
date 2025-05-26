@@ -8,7 +8,7 @@
   iframes in timing recordings, e.g. at a very basic level.
  */
 export const dotLookup = (dest, path, parent = false) => {
-  if (path === '' || path === []) {
+  if (path === '') {
     return dest;
   }
 
@@ -16,6 +16,9 @@ export const dotLookup = (dest, path, parent = false) => {
   let isArray = false;
 
   if (Array.isArray(path)) {
+    if (path.length === 0) {
+      return dest;
+    }
     nodes = path;
     isArray = true;
   }
@@ -61,6 +64,10 @@ const change = (dest, path, changes) => {
   else {
     const ppath = path.split('.');
     parentNode = ppath.slice(-1);
+  }
+
+  if (localDest[parentNode] !== changes[0]) {
+    console.warn(`Supposed to change ${path} from ${changes[0]} to ${changes[1]} but it was ${localDest[parentNode]}`);
   }
 
   localDest[parentNode] = changes[1];
