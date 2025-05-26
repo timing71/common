@@ -1,4 +1,4 @@
-import { createIframe } from '../replay.js';
+import { createIframe, filenameFromManifest } from '../replay.js';
 
 describe('Replay module', () => {
   describe('creation of iframes', () => {
@@ -30,6 +30,19 @@ describe('Replay module', () => {
 
       expect(iframe.messages.length).toEqual(1);
       expect(iframe.messages[0]).toEqual([12345, 'foo', 'bar']);
+    });
+  });
+
+  describe('#filenameFromManifest', () => {
+    it('suggests a filename', () => {
+      const manifest = {
+        startTime: new Date('2025-01-31 12:34:56 +00:00').getTime() / 1000,
+        name: 'Service Name',
+        description: 'Description with invalid/unwanted characters'
+      };
+
+      const filename = filenameFromManifest(manifest, 'ext');
+      expect(filename).toEqual('2025-01-31 12-34 Service Name - Description with invalid_unwanted characters.ext');
     });
   });
 });

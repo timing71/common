@@ -1,4 +1,5 @@
 import { BlobReader, TextWriter, ZipReader } from '@zip.js/zip.js';
+import dayjs from './dates.js';
 import { diff, patch } from './diffs.js';
 
 export const REPLAY_FRAME_REGEX = /^([0-9]{5,11})(i?).json$/;
@@ -196,4 +197,9 @@ export const loadReplayFromFile = async(file) => {
   const replay = new Replay(reader);
   await replay._init();
   return replay;
+};
+
+export const filenameFromManifest = (manifest, extension = 'zip') => {
+  const startTime = dayjs(manifest.startTime * 1000);
+  return `${startTime.format('YYYY-MM-DD HH-mm')} ${manifest.name} - ${manifest.description}.${extension}`.replaceAll(/[\\/]/g, '_');
 };
