@@ -3,6 +3,15 @@ import deepEqual from 'deep-equal';
 import { EventEmitter } from '../eventEmitter.js';
 import { MessageGenerator } from '../messages/index.js';
 import { Events, Severity } from './events.js';
+import { FlagState } from '../racing.js';
+
+const DEFAULT_INITIAL_STATE = {
+  cars: [],
+  session: {
+    flagState: FlagState.NONE
+  },
+  messages: []
+};
 
 /**
  * The base class for all timing service providers.
@@ -18,7 +27,7 @@ export class Service extends EventEmitter {
    * @param {object} service A service definition (UUID, start time and source URL)
    * @param {object} initialState Initial state of the service (optional)
    */
-  constructor(service, initialState = {}) {
+  constructor(service, initialState = DEFAULT_INITIAL_STATE) {
     super();
     this.service = service;
 

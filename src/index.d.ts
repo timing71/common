@@ -47,7 +47,7 @@ interface Manifest {
 interface ServiceState {
   cars: Car[],
   session: SessionState,
-  manifest: Manifest,
+  manifest?: Manifest,
   messages: Message[],
 }
 
