@@ -105,7 +105,9 @@ export class Service extends EventEmitter {
   stop(): void;
 }
 
-export function mapServiceProvider(url: string): { new(spec: ServiceDefinition): Service } | null
+export function registerServiceProvider(providerClass: typeof Service): void;
+export function serviceProviderCount(): number;
+export function mapServiceProvider(url: string): { new(spec: ServiceDefinition): Service } | null;
 
 export function timeInSeconds(time: number, precision: number): string;
 export function timeWithHours(time: number): string;
