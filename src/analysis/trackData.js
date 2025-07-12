@@ -2,7 +2,7 @@ import { types } from 'mobx-state-tree';
 
 const Datum = types.model({
   timestamp: types.Date,
-  value: types.union(types.number, types.string)
+  value: types.union(types.number, types.string, types.undefined)
 });
 
 const SeriesModel = types.model({
