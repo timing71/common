@@ -80,13 +80,21 @@ export class Service extends EventEmitter {
     newState.lastUpdated = Date.now();
     delete newState.extraMessages;
 
+    if (this.parameters && this.constructor.parametersSpec) {
+      if (!newState.meta) {
+        newState.meta = {};
+      }
+      newState.meta.parameters = this.parameters;
+    }
+
     this.emit(Events.STATE_CHANGE, newState);
     this._prevState = newState;
   }
 
   /**
-   * Adds start time and UUID to the manifest, and if a deep equality check
-   * fails, emits an event with the new manifest then updates our state.
+   * Adds start time, UUID and parameters (if appropriate) to the manifest, and
+   * if a deep equality check fails, emits an event with the new manifest then
+   * updates our state.
    */
   onManifestChange(newManifest) {
     const newManifestWithStartTime = {
@@ -94,6 +102,10 @@ export class Service extends EventEmitter {
       startTime: this.service.startTime,
       uuid: this.service.uuid
     };
+
+    if (this.constructor.parametersSpec) {
+      newManifestWithStartTime.parameters = this.constructor.parametersSpec;
+    }
 
     if (!deepEqual(newManifestWithStartTime, this._prevState.manifest)) {
       this.emit(Events.MANIFEST_CHANGE, newManifestWithStartTime);
