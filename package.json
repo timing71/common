@@ -1,6 +1,6 @@
 {
   "name": "@timing71/common",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Timing71 common library",
   "type": "module",
   "engines": {
