@@ -50,7 +50,7 @@ export class Service extends EventEmitter {
     this.service = {
       ...this.service,
       currentSessionIndex: (this.service.currentSessionIndex || 0) + 1,
-      startTime: Date.now()
+      startTime: Math.floor(Date.now() / 1000)
     };
     this.emit(Events.SESSION_CHANGE, this.service.currentSessionIndex);
   }
